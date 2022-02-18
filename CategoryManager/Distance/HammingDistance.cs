@@ -1,8 +1,8 @@
 ﻿namespace CategoryManager.Distance;
 
-internal class HammingDistance : IDistance
+internal sealed class HammingDistance : IDistance
 {
-  public int CalculateDistance(int[] object1, int[] object2)
+  public double CalculateDistance(int[] object1, int[] object2)
   {
     if (object1.Length != object2.Length)
     {

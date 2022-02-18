@@ -2,5 +2,5 @@
 
 internal interface IDistance
 {
-    int CalculateDistance(int[] object1, int[] object2);
+    double CalculateDistance(int[] object1, int[] object2);
 }

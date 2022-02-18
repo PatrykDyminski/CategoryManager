@@ -3,9 +3,9 @@ using CategoryManager.Utils;
 
 namespace CategoryManager.Candidates;
 
-internal class MedoidBasedCandidates : IExtractCandidates
+internal class CentroidBasedCandidates : IExtractCandidates
 {
-	public int[][] ExtractCandidates(int[][] candidates, IDistance distance, int[][] universe = null)
+	public int[][] ExtractCandidates(int[][] candidates, IDistance distance, int[][] universe)
 	{
 		var dict = candidates
 			.GroupBy(x => x, new IntArrayComparer())
@@ -16,8 +16,8 @@ internal class MedoidBasedCandidates : IExtractCandidates
 		//	.ToList()
 		//	.ForEach(Console.WriteLine);
 
-		//Score each object
-		var scoreDict = dict.Keys
+		//Score each object in universe
+		var scoreDict = universe
 			.Select(x => new
 			{
 				Key = x,

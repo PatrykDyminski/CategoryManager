@@ -3,9 +3,9 @@ using CategoryManager.Utils;
 
 namespace CategoryManager.Candidates;
 
-internal class CentroidBasedCandidates : IExtractCandidates
+internal class CentroidBasedCandidates : ICandidatesExtractor
 {
-	public int[][] ExtractCandidates(int[][] candidates, IDistance distance, int[][] universe)
+	public int[][] ExtractCandidates(int[][] candidates, IDistance macrostructure, int[][] universe)
 	{
 		var dict = candidates
 			.GroupBy(x => x, new IntArrayComparer())
@@ -21,7 +21,7 @@ internal class CentroidBasedCandidates : IExtractCandidates
 			.Select(x => new
 			{
 				Key = x,
-				Score = dict.Select(obj => obj.Value * distance.CalculateDistance(obj.Key, x)).Sum()
+				Score = dict.Select(obj => obj.Value * macrostructure.CalculateDistance(obj.Key, x)).Sum()
 			});
 
 		//Find minimal score

@@ -1,12 +1,12 @@
 ﻿namespace CategoryManager.Distance;
 
-internal sealed class JaccardDistance : IDistance
+public sealed class JaccardDistance : IDistance
 {
 	public double CalculateDistance(int[] object1, int[] object2)
 	{
     if (object1.Length != object2.Length)
     {
-      throw new Exception("Objects must be equal length");
+      throw new ArgumentException("Objects must be equal length");
     }
 
     int inter = 0;

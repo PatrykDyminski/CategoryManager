@@ -2,7 +2,7 @@
 
 namespace CategoryManager.Candidates;
 
-internal interface ICandidatesExtractor
+public interface ICandidatesExtractor
 {
 	int[][] ExtractCandidates(int[][] candidates, IDistance macrostructure, int[][] universe = null);
 }

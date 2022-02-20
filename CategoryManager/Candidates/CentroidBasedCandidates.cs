@@ -3,7 +3,7 @@ using CategoryManager.Utils;
 
 namespace CategoryManager.Candidates;
 
-internal class CentroidBasedCandidates : ICandidatesExtractor
+public sealed class CentroidBasedCandidates : ICandidatesExtractor
 {
 	public int[][] ExtractCandidates(int[][] candidates, IDistance macrostructure, int[][] universe)
 	{
@@ -11,10 +11,6 @@ internal class CentroidBasedCandidates : ICandidatesExtractor
 			.GroupBy(x => x, new IntArrayComparer())
 			.Select(x => new { x.Key, Count = x.Count() })
 			.ToDictionary(x => x.Key, x => x.Count);
-
-		//dict.Select(i => $"{string.Join("", i.Key)}: {i.Value}")
-		//	.ToList()
-		//	.ForEach(Console.WriteLine);
 
 		//Score each object in universe
 		var scoreDict = universe

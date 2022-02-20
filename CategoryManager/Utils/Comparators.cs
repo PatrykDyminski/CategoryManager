@@ -6,12 +6,11 @@ public class IntArrayComparer : IEqualityComparer<int[]>
 {
 	public bool Equals(int[]? x, int[]? y)
 	{
-		return string.Equals(string.Join("", x), string.Join("", y));
+		return string.Equals(x.AsString(), y.AsString());
 	}
 
 	public int GetHashCode([DisallowNull] int[] obj)
 	{
-		var str = string.Join("", obj);
-		return int.Parse(str);
+		return int.Parse(obj.AsString());
 	}
 }

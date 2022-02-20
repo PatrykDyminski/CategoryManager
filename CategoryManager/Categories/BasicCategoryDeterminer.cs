@@ -5,7 +5,7 @@ using CategoryManager.Utils;
 
 namespace CategoryManager.Categories;
 
-internal class BasicCategoryDeterminer : ICategoryDeterminer
+public class BasicCategoryDeterminer : ICategoryDeterminer
 {
 	public Category DetermineCategory(Observation[] observations, IDistance macrostructure, ICandidatesExtractor candidatesExtractor)
 	{
@@ -23,38 +23,24 @@ internal class BasicCategoryDeterminer : ICategoryDeterminer
 
 		foreach (var prototypeCandidate in candidates)
 		{
-			Console.WriteLine(string.Join("", prototypeCandidate));
-
 			var positiveDistances = positiveObservationsSet
 				.Select(x => new { x.ObservedObject ,Distance = macrostructure.CalculateDistance(prototypeCandidate, x.ObservedObject)});
 
 			var negativeDistances = negativeObservationsSet
 				.Select(x => new { x.ObservedObject, Distance = macrostructure.CalculateDistance(prototypeCandidate, x.ObservedObject)});
 
-			Console.WriteLine(string.Join(" ",positiveDistances.Select(x => x.Distance)));
-			Console.WriteLine(string.Join(" ", negativeDistances.Select(x => x.Distance)));
-
 			var minimalNegativeDistance = negativeDistances.MinBy(x => x.Distance).Distance;
 			var maximalPositiveDistance = positiveDistances.MaxBy(x => x.Distance).Distance;
-
-			Console.WriteLine(minimalNegativeDistance);
-			Console.WriteLine(maximalPositiveDistance);
 
 			var fPlus = positiveDistances.Where(x => x.Distance < minimalNegativeDistance);
 			var tauPlus = fPlus.Any()
 				? fPlus.MaxBy(x => x.Distance).Distance
 				: -1;
 
-			Console.WriteLine("Fplus: " + string.Join(" ", fPlus.Select(x => x.Distance)));
-			Console.WriteLine("tauPlus: " + tauPlus);
-
 			var fMinus = negativeDistances.Where(x => x.Distance > maximalPositiveDistance);
 			var tauMinus = fMinus.Any()
 				? fMinus.MinBy(x => x.Distance).Distance
 				: -1;
-
-			Console.WriteLine("Fminus: " + string.Join(" ", fMinus.Select(x => x.Distance)));
-			Console.WriteLine("tauMinus: " + tauMinus);
 
 			var core = tauPlus > -1
 				? positiveDistances.Where(x => x.Distance <= tauPlus).Select(y => y.ObservedObject)

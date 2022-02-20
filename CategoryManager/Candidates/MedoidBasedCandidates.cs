@@ -3,7 +3,7 @@ using CategoryManager.Utils;
 
 namespace CategoryManager.Candidates;
 
-internal class MedoidBasedCandidates : ICandidatesExtractor
+public class MedoidBasedCandidates : ICandidatesExtractor
 {
 	public int[][] ExtractCandidates(int[][] candidates, IDistance macrostructure, int[][] universe = null)
 	{
@@ -11,10 +11,6 @@ internal class MedoidBasedCandidates : ICandidatesExtractor
 			.GroupBy(x => x, new IntArrayComparer())
 			.Select(x => new { x.Key, Count = x.Count() })
 			.ToDictionary(x => x.Key, x => x.Count);
-
-		//dict.Select(i => $"{string.Join("", i.Key)}: {i.Value}")
-		//	.ToList()
-		//	.ForEach(Console.WriteLine);
 
 		//Score each object
 		var scoreDict = dict.Keys

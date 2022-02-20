@@ -1,6 +1,6 @@
 ﻿namespace CategoryManager.Distance;
 
-internal interface IDistance
+public interface IDistance
 {
-    double CalculateDistance(int[] object1, int[] object2);
+	double CalculateDistance(int[] object1, int[] object2);
 }

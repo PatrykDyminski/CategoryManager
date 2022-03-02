@@ -2,8 +2,8 @@
 
 public static class ExtensionMethods
 {
-	public static string AsString(this int[] obj)
+	public static string AsString(this int[] array)
 	{
-		return string.Join("", obj);
+		return string.Join("", array);
 	}
 }

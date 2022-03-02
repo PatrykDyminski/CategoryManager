@@ -18,7 +18,9 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 		var negativeObservationsSet = negativeObservations.DistinctBy(x => x.ObservedObject, new IntArrayComparer());
 
 		var candidates = candidatesExtractor.ExtractCandidates(
-			positiveObservations.Select(x => x.ObservedObject).ToArray(), 
+			positiveObservations
+				.Select(x => x.ObservedObject)
+				.ToArray(), 
 			macrostructure);
 
 		foreach (var prototypeCandidate in candidates)
@@ -50,6 +52,7 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 				? negativeDistances.Where(x => x.Distance >= tauMinus).Select(y => y.ObservedObject)
 				: Array.Empty<int[]>();
 
+			//boundary is positive and negative objects not present in the core and outer
 			var boundary = positiveObservationsSet
 				.Select(x => x.ObservedObject)
 				.Concat(negativeObservationsSet
@@ -57,7 +60,11 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 				.Except(core
 					.Concat(outer), new IntArrayComparer());
 
-			if(core.Count() >= positiveObservationsSet.Select(x => x.ObservedObject).Intersect(boundary, new IntArrayComparer()).Count())
+			//more objects in the core than positive objects in the boundary
+			if(core.Count() >= positiveObservationsSet
+				.Select(x => x.ObservedObject)
+				.Intersect(boundary, new IntArrayComparer())
+				.Count())
 			{
 				return new Category
 				{

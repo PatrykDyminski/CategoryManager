@@ -5,7 +5,14 @@ namespace CategoryManager.Candidates;
 
 public sealed class CentroidBasedCandidates : ICandidatesExtractor
 {
-	public int[][] ExtractCandidates(int[][] candidates, IDistance macrostructure, int[][] universe)
+	private readonly IDistance macrostructure;
+
+	public CentroidBasedCandidates(IDistance macrostructure)
+	{
+		this.macrostructure = macrostructure;
+	}
+
+	public int[][] ExtractCandidates(int[][] candidates, int[][] universe)
 	{
 		var dict = candidates
 			.GroupBy(x => x, new IntArrayComparer())

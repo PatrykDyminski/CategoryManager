@@ -7,7 +7,16 @@ namespace CategoryManager.Categories;
 
 public class BasicCategoryDeterminer : ICategoryDeterminer
 {
-	public Category DetermineCategory(Observation[] observations, IDistance macrostructure, ICandidatesExtractor candidatesExtractor)
+	private readonly IDistance macrostructure;
+	private readonly ICandidatesExtractor candidatesExtractor;
+
+	public BasicCategoryDeterminer(IDistance macrostructure, ICandidatesExtractor candidatesExtractor)
+	{
+		this.macrostructure = macrostructure;
+		this.candidatesExtractor = candidatesExtractor;
+	}
+
+	public Category DetermineCategory(Observation[] observations)
 	{
 		int[] prototype = Array.Empty<int>();
 
@@ -20,8 +29,7 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 		var candidates = candidatesExtractor.ExtractCandidates(
 			positiveObservations
 				.Select(x => x.ObservedObject)
-				.ToArray(), 
-			macrostructure);
+				.ToArray());
 
 		foreach (var prototypeCandidate in candidates)
 		{

@@ -1,8 +1,6 @@
-﻿using CategoryManager.Distance;
-
-namespace CategoryManager.Candidates;
+﻿namespace CategoryManager.Candidates;
 
 public interface ICandidatesExtractor
 {
-	int[][] ExtractCandidates(int[][] candidates, IDistance macrostructure, int[][] universe = null);
+	int[][] ExtractCandidates(int[][] candidates, int[][] universe = null);
 }

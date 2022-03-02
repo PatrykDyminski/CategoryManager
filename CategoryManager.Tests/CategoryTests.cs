@@ -48,8 +48,8 @@ public class CategoryTests
 	[TestMethod]
 	public void BasicCategoryTest()
 	{
-		var cate = new BasicCategoryDeterminer();
-		var category = cate.DetermineCategory(observations, new HammingDistance(), new MedoidBasedCandidates());
+		var cate = new BasicCategoryDeterminer(new HammingDistance(), new MedoidBasedCandidates(new HammingDistance()));
+		var category = cate.DetermineCategory(observations);
 
 		category.Tminus.Should().Be(3);
 		category.Tplus.Should().Be(1);

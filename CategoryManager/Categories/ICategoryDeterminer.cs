@@ -6,5 +6,5 @@ namespace CategoryManager.Categories;
 
 public interface ICategoryDeterminer
 {
-	Category DetermineCategory(Observation[] observations, IDistance macrostructure, ICandidatesExtractor candidatesExtractor);
+	Category DetermineCategory(Observation[] observations);
 }

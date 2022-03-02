@@ -34,8 +34,8 @@ public class CandidatesTests
 	[TestMethod]
 	public void CentroidCandidatesTest()
 	{
-		var centroid = new CentroidBasedCandidates();
-		var cands = centroid.ExtractCandidates(list, new HammingDistance(), universe);
+		var centroid = new CentroidBasedCandidates(new HammingDistance());
+		var cands = centroid.ExtractCandidates(list, universe);
 
 		cands.Should().HaveCount(2);
 		cands[0].Length.Should().Be(3);
@@ -48,8 +48,8 @@ public class CandidatesTests
 	[TestMethod]
 	public void MerdoidCandidatesTest()
 	{
-		var medoid = new MedoidBasedCandidates();
-		var cands = medoid.ExtractCandidates(list, new HammingDistance());
+		var medoid = new MedoidBasedCandidates(new HammingDistance());
+		var cands = medoid.ExtractCandidates(list);
 
 		cands.Should().HaveCount(1);
 		cands[0].Length.Should().Be(3);

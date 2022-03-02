@@ -1,6 +1,4 @@
-﻿using CategoryManager.Candidates;
-using CategoryManager.Distance;
-using CategoryManager.Model;
+﻿using CategoryManager.Model;
 
 namespace CategoryManager.Categories;
 

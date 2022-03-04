@@ -1,5 +1,6 @@
 ﻿using CategoryManager.Candidates;
-using CategoryManager.Categories;
+using CategoryManager.Category;
+using CategoryManager.CategoryDeterminer;
 using CategoryManager.Distance;
 using CategoryManager.Model;
 using CategoryManager.Repository;
@@ -59,11 +60,10 @@ static void Run(IServiceProvider services, Observation[] observations)
 	using var serviceScope = services.CreateScope();
 	var provider = serviceScope.ServiceProvider;
 
-	var catdet = provider.GetRequiredService<ICategoryDeterminer>();
+	var cat = new Category(provider.GetRequiredService<ICategoryDeterminer>());
 
-	var cat = catdet.DetermineCategory(observations);
-
-	Console.WriteLine(cat.Tminus);
+	foreach (var obs in observations)
+	{
+		cat.AddObservation(obs);
+	}
 }
-
-

@@ -3,7 +3,7 @@ using CategoryManager.Distance;
 using CategoryManager.Model;
 using CategoryManager.Utils;
 
-namespace CategoryManager.Categories;
+namespace CategoryManager.CategoryDeterminer;
 
 public class BasicCategoryDeterminer : ICategoryDeterminer
 {
@@ -16,7 +16,7 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 		this.candidatesExtractor = candidatesExtractor;
 	}
 
-	public Category DetermineCategory(Observation[] observations)
+	public CategorySummary DetermineCategory(Observation[] observations)
 	{
 		int[] prototype = Array.Empty<int>();
 
@@ -34,10 +34,16 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 		foreach (var prototypeCandidate in candidates)
 		{
 			var positiveDistances = positiveObservationsSet
-				.Select(x => new { x.ObservedObject ,Distance = macrostructure.CalculateDistance(prototypeCandidate, x.ObservedObject)});
+				.Select(x => new { x.ObservedObject, Distance = macrostructure.CalculateDistance(prototypeCandidate, x.ObservedObject) });
 
 			var negativeDistances = negativeObservationsSet
-				.Select(x => new { x.ObservedObject, Distance = macrostructure.CalculateDistance(prototypeCandidate, x.ObservedObject)});
+				.Select(x => new { x.ObservedObject, Distance = macrostructure.CalculateDistance(prototypeCandidate, x.ObservedObject) });
+
+			//not enough observations
+			if(!positiveDistances.Any() || !negativeDistances.Any())
+			{
+				return ReturnEmptyCategory();
+			}
 
 			var minimalNegativeDistance = negativeDistances.MinBy(x => x.Distance).Distance;
 			var maximalPositiveDistance = positiveDistances.MaxBy(x => x.Distance).Distance;
@@ -69,12 +75,12 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 					.Concat(outer), new IntArrayComparer());
 
 			//more objects in the core than positive objects in the boundary
-			if(core.Count() >= positiveObservationsSet
+			if (core.Count() >= positiveObservationsSet
 				.Select(x => x.ObservedObject)
 				.Intersect(boundary, new IntArrayComparer())
 				.Count())
 			{
-				return new Category
+				return new CategorySummary
 				{
 					Prototype = prototypeCandidate,
 					Tplus = tauPlus,
@@ -83,7 +89,12 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 			}
 		}
 
-		return new Category
+		return ReturnEmptyCategory();
+	}
+
+	private CategorySummary ReturnEmptyCategory()
+	{
+		return new CategorySummary
 		{
 			Prototype = Array.Empty<int>(),
 			Tplus = 0,

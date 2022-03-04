@@ -1,4 +1,4 @@
-﻿using CategoryManager.Categories;
+﻿using CategoryManager.CategoryDeterminer;
 using CategoryManager.Model;
 
 namespace CategoryManager.Repository;
@@ -8,18 +8,18 @@ internal class CategoryRepository : ICategoryRepository
 	private readonly ICategoryDeterminer CategoryDeterminer;
 
 
-	private List<Category> Categories { get; }
+	private List<CategorySummary> Categories { get; }
 	private Dictionary<int, List<Observation>> Observations { get; }
 
 	public CategoryRepository(ICategoryDeterminer categoryDeterminer)
 	{
 		CategoryDeterminer = categoryDeterminer;
 
-		Categories = new List<Category>();
+		Categories = new List<CategorySummary>();
 		Observations = new Dictionary<int, List<Observation>>();
 	}
 
-	public void AddCategory(Category category)
+	public void AddCategory(CategorySummary category)
 	{
 		Categories.Add(category);
 	}
@@ -32,10 +32,5 @@ internal class CategoryRepository : ICategoryRepository
 	public void DisplaySummary()
 	{
 		throw new NotImplementedException();
-	}
-
-	private void RecalculateCategory(int categoryId)
-	{
-		
 	}
 }

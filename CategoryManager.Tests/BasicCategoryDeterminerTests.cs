@@ -5,10 +5,11 @@ using CategoryManager.Model;
 using CategoryManager.Utils;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace CategoryManager.Tests;
 
 [TestClass]
-public class CategoryTests
+public class BasicCategoryDeterminerTests
 {
 	private static readonly Observation[] observations = new Observation[]
 	{
@@ -45,23 +46,14 @@ public class CategoryTests
 	};
 
 	[TestMethod]
-	public void BasicCategoryTest()
+	public void BasicCategoryDeterminerTest()
 	{
-		var catdet = new BasicCategoryDeterminer(new HammingDistance(), new MedoidBasedCandidates(new HammingDistance()));
+		var cate = new BasicCategoryDeterminer(new HammingDistance(), new MedoidBasedCandidates(new HammingDistance()));
+		var category = cate.DetermineCategory(observations);
 
-		var category = new Category.Category(catdet);
-
-		foreach (var obs in observations)
-		{
-			category.AddObservation(obs);
-		}
-
-		var res = category.Summary;
-
-		res.Tminus.Should().Be(3);
-		res.Tplus.Should().Be(1);
+		category.Tminus.Should().Be(3);
+		category.Tplus.Should().Be(1);
 
 		category.Prototype.AsString().Should().Be("0011");
-		res.Prototype.AsString().Should().Be("0011");
 	}
 }

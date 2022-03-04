@@ -4,7 +4,7 @@ namespace CategoryManager.Repository;
 
 internal interface ICategoryRepository
 {
-	void AddCategory(Category category);
+	void AddCategory(CategorySummary category);
 
 	void AddObservation(Observation observation);
 

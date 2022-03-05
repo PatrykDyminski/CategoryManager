@@ -66,7 +66,7 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 				? negativeDistances.Where(x => x.Distance >= tauMinus).Select(y => y.ObservedObject)
 				: Array.Empty<int[]>();
 
-			//boundary is positive and negative objects not present in the core and outer
+			//boundary = positive and negative objects not present in the core and outer
 			var boundary = positiveObservationsSet
 				.Select(x => x.ObservedObject)
 				.Concat(negativeObservationsSet

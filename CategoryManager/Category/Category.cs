@@ -7,6 +7,7 @@ public class Category : ICategory
 {
 	private readonly ICategoryDeterminer categoryDeterminer;
 
+	private readonly int categoryId;
 	private readonly List<Observation> observations;
 	private CategorySummary summary;
 
@@ -16,12 +17,15 @@ public class Category : ICategory
 
 	public CategorySummary Summary => summary;
 
-	public Category(ICategoryDeterminer categoryDeterminer)
+	public int Id => categoryId;
+
+	public Category(ICategoryDeterminer categoryDeterminer, int id)
 	{
 		this.categoryDeterminer = categoryDeterminer;
 
 		observations = new List<Observation>();
 		summary = new CategorySummary();
+		categoryId = id;
 	}
 
 	public void AddObservation(Observation observation)
@@ -39,7 +43,7 @@ public class Category : ICategory
 			return;
 		}
 
-		if(observations.Count - previousRecalculation >= 5)
+		if (observations.Count - previousRecalculation >= 5)
 		{
 			RecalculateCategorySummary();
 			return;

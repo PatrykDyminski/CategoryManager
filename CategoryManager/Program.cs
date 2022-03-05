@@ -60,10 +60,14 @@ static void Run(IServiceProvider services, Observation[] observations)
 	using var serviceScope = services.CreateScope();
 	var provider = serviceScope.ServiceProvider;
 
-	var cat = new Category(provider.GetRequiredService<ICategoryDeterminer>());
+	var repo = provider.GetRequiredService<ICategoryRepository>();
 
 	foreach (var obs in observations)
 	{
-		cat.AddObservation(obs);
+		repo.AddObservation(obs);
 	}
+
+	Console.WriteLine("sadasdasda");
+
+	repo.DisplaySummary();
 }

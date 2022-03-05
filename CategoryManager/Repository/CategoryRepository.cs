@@ -5,32 +5,36 @@ namespace CategoryManager.Repository;
 
 internal class CategoryRepository : ICategoryRepository
 {
-	private readonly ICategoryDeterminer CategoryDeterminer;
+	private readonly ICategoryDeterminer categoryDeterminer;
 
-
-	private List<CategorySummary> Categories { get; }
-	private Dictionary<int, List<Observation>> Observations { get; }
+	private List<Category.Category> Categories { get; }
 
 	public CategoryRepository(ICategoryDeterminer categoryDeterminer)
 	{
-		CategoryDeterminer = categoryDeterminer;
-
-		Categories = new List<CategorySummary>();
-		Observations = new Dictionary<int, List<Observation>>();
-	}
-
-	public void AddCategory(CategorySummary category)
-	{
-		Categories.Add(category);
+		Categories = new List<Category.Category>();
+		this.categoryDeterminer = categoryDeterminer;
 	}
 
 	public void AddObservation(Observation observation)
 	{
-		Observations[observation.CategoryId].Add(observation);
+		//if there is no such category observed before
+		EnsureCategoryExist(observation);
+
+		Categories
+			.Single(x => x.Id == observation.CategoryId)
+			.AddObservation(observation);
+	}
+
+	private void EnsureCategoryExist(Observation observation)
+	{
+		if (!Categories.Where(x => x.Id == observation.CategoryId).Any())
+		{
+			Categories.Add(new Category.Category(categoryDeterminer, observation.CategoryId));
+		}
 	}
 
 	public void DisplaySummary()
 	{
-		throw new NotImplementedException();
+		Categories.ForEach(x => x.DisplayCategorySummary());
 	}
 }

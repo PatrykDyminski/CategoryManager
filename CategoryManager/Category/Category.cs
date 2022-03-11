@@ -59,7 +59,13 @@ public class Category : ICategory
 
 	private void RecalculateCategorySummary()
 	{
-		summary = categoryDeterminer.DetermineCategory(observations.ToArray());
+		var result = categoryDeterminer.DetermineCategory(observations.ToArray());
+
+		if (result.isSuccess)
+		{
+			summary = result.categorySummary;
+		}
+
 		previousRecalculation = observations.Count;
 
 		//to remove

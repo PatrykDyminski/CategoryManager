@@ -14,6 +14,11 @@ public class CategorySummary
 
 	public override string ToString()
 	{
-		return "Tplus: " + Tplus + ", Tminus: " + Tminus + ", Prototype: " + Prototype.AsString();
+		if(Prototype == Array.Empty<int>())
+		{
+			return "Empty summary";
+		}
+
+		return "Core: " + Tplus + ", Boundary: " + Tminus + ", Prototype: " + Prototype.AsString();
 	}
 }

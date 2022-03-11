@@ -3,7 +3,7 @@ using CategoryManager.Model;
 
 namespace CategoryManager.Relations.Features;
 
-internal class RelationFeaturesDeterminer
+public class RelationFeaturesDeterminer
 {
 	private readonly IDistance macrostructure;
 

@@ -16,7 +16,7 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 		this.candidatesExtractor = candidatesExtractor;
 	}
 
-	public CategorySummary DetermineCategory(Observation[] observations)
+	public (bool isSuccess, CategorySummary categorySummary) DetermineCategory(Observation[] observations)
 	{
 		int[] prototype = Array.Empty<int>();
 
@@ -58,6 +58,11 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 				? fMinus.MinBy(x => x.Distance).Distance
 				: -1;
 
+			if(tauPlus == -1 || tauMinus == -1)
+			{
+				return ReturnEmptyCategory();
+			}
+
 			var core = tauPlus > -1
 				? positiveDistances.Where(x => x.Distance <= tauPlus).Select(y => y.ObservedObject)
 				: Array.Empty<int[]>();
@@ -80,25 +85,25 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 				.Intersect(boundary, new IntArrayComparer())
 				.Count())
 			{
-				return new CategorySummary
+				return (true, new CategorySummary
 				{
 					Prototype = prototypeCandidate,
 					Tplus = tauPlus,
 					Tminus = tauMinus,
-				};
+				});
 			}
 		}
 
 		return ReturnEmptyCategory();
 	}
 
-	private CategorySummary ReturnEmptyCategory()
+	private (bool, CategorySummary) ReturnEmptyCategory()
 	{
-		return new CategorySummary
+		return (false, new CategorySummary
 		{
 			Prototype = Array.Empty<int>(),
 			Tplus = 0,
 			Tminus = 0,
-		};
+		});
 	}
 }

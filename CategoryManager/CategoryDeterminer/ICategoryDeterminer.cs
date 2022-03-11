@@ -4,5 +4,5 @@ namespace CategoryManager.CategoryDeterminer;
 
 public interface ICategoryDeterminer
 {
-	CategorySummary DetermineCategory(Observation[] observations);
+	(bool isSuccess, CategorySummary categorySummary) DetermineCategory(Observation[] observations);
 }

@@ -18,8 +18,8 @@ public class RFTUtils
 	{
 		var c1 = CSUtils.CreateSummary(core1, boundary1);
 		var c2 = CSUtils.CreateSummary(core2, boundary2);
-		var res = method(c1, c2, distance);
-		res.result.Should().Be(expectedResult);
-		res.common.Should().Be(numericResult);
+		var (result, common) = method(c1, c2, distance);
+		result.Should().Be(expectedResult);
+		common.Should().Be(numericResult);
 	}
 }

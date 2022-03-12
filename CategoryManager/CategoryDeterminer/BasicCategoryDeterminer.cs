@@ -2,6 +2,7 @@
 using CategoryManager.Distance;
 using CategoryManager.Model;
 using CategoryManager.Utils;
+using CSharpFunctionalExtensions;
 
 namespace CategoryManager.CategoryDeterminer;
 
@@ -16,7 +17,7 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 		this.candidatesExtractor = candidatesExtractor;
 	}
 
-	public (bool isSuccess, CategorySummary categorySummary) DetermineCategory(Observation[] observations)
+	public Result<CategorySummary> DetermineCategory(Observation[] observations)
 	{
 		int[] prototype = Array.Empty<int>();
 
@@ -42,34 +43,38 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 			//not enough observations
 			if(!positiveDistances.Any() || !negativeDistances.Any())
 			{
-				return ReturnEmptyCategory();
+				return Result.Failure<CategorySummary>("Could not determine category - not enough observations");
 			}
 
-			var minimalNegativeDistance = negativeDistances.MinBy(x => x.Distance).Distance;
-			var maximalPositiveDistance = positiveDistances.MaxBy(x => x.Distance).Distance;
+			var minimalNegativeDistance = negativeDistances.MinBy(x => x.Distance)!.Distance;
+			var maximalPositiveDistance = positiveDistances.MaxBy(x => x.Distance)!.Distance;
 
 			var fPlus = positiveDistances.Where(x => x.Distance < minimalNegativeDistance);
 			var tauPlus = fPlus.Any()
-				? fPlus.MaxBy(x => x.Distance).Distance
-				: -1;
+				? Maybe.From(fPlus.MaxBy(x => x.Distance)!.Distance)
+				: Maybe.None;
 
 			var fMinus = negativeDistances.Where(x => x.Distance > maximalPositiveDistance);
 			var tauMinus = fMinus.Any()
-				? fMinus.MinBy(x => x.Distance).Distance
-				: -1;
+				? Maybe.From(fMinus.MinBy(x => x.Distance)!.Distance)
+				: Maybe.None;
 
-			if(tauPlus == -1 || tauMinus == -1)
+			if (tauPlus.HasNoValue || tauMinus.HasNoValue)
 			{
-				return ReturnEmptyCategory();
+				return Result.Failure<CategorySummary>("Could not determine category");
 			}
 
-			var core = tauPlus > -1
-				? positiveDistances.Where(x => x.Distance <= tauPlus).Select(y => y.ObservedObject)
-				: Array.Empty<int[]>();
+			var core = tauPlus.GetValueOrDefault(
+				tp => positiveDistances
+					.Where(x => x.Distance <= tp)
+					.Select(y => y.ObservedObject), 
+				Array.Empty<int[]>());
 
-			var outer = tauMinus > -1
-				? negativeDistances.Where(x => x.Distance >= tauMinus).Select(y => y.ObservedObject)
-				: Array.Empty<int[]>();
+			var outer = tauMinus.GetValueOrDefault(
+				tm => negativeDistances
+					.Where(x => x.Distance >= tm)
+					.Select(y => y.ObservedObject),
+				Array.Empty<int[]>());
 
 			//boundary = positive and negative objects not present in the core and outer
 			var boundary = positiveObservationsSet
@@ -85,25 +90,15 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 				.Intersect(boundary, new IntArrayComparer())
 				.Count())
 			{
-				return (true, new CategorySummary
+				return new CategorySummary
 				{
 					Prototype = prototypeCandidate,
-					Tplus = tauPlus,
-					Tminus = tauMinus,
-				});
+					Tplus = tauPlus.Value,
+					Tminus = tauMinus.Value,
+				};
 			}
 		}
 
-		return ReturnEmptyCategory();
-	}
-
-	private (bool, CategorySummary) ReturnEmptyCategory()
-	{
-		return (false, new CategorySummary
-		{
-			Prototype = Array.Empty<int>(),
-			Tplus = 0,
-			Tminus = 0,
-		});
+		return Result.Failure<CategorySummary>("Could not determine category");
 	}
 }

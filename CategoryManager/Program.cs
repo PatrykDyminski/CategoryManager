@@ -1,5 +1,4 @@
 ﻿using CategoryManager.Candidates;
-using CategoryManager.Category;
 using CategoryManager.CategoryDeterminer;
 using CategoryManager.Distance;
 using CategoryManager.Model;

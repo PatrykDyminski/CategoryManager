@@ -58,10 +58,10 @@ public class CategoryTests
 
 		var res = category.Summary;
 
-		res.Tminus.Should().Be(3);
-		res.Tplus.Should().Be(1);
+		res.Value.Tminus.Should().Be(3);
+		res.Value.Tplus.Should().Be(1);
 
 		category.Prototype.AsString().Should().Be("0011");
-		res.Prototype.AsString().Should().Be("0011");
+		res.Value.Prototype.AsString().Should().Be("0011");
 	}
 }

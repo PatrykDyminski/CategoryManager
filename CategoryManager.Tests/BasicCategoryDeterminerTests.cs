@@ -51,10 +51,10 @@ public class BasicCategoryDeterminerTests
 		var cate = new BasicCategoryDeterminer(new HammingDistance(), new MedoidBasedCandidates(new HammingDistance()));
 		var category = cate.DetermineCategory(observations);
 
-		category.isSuccess.Should().BeTrue();
-		category.categorySummary.Tminus.Should().Be(3);
-		category.categorySummary.Tplus.Should().Be(1);
+		category.IsSuccess.Should().BeTrue();
+		category.Value.Tminus.Should().Be(3);
+		category.Value.Tplus.Should().Be(1);
 
-		category.categorySummary.Prototype.AsString().Should().Be("0011");
+		category.Value.Prototype.AsString().Should().Be("0011");
 	}
 }

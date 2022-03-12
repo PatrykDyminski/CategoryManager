@@ -1,5 +1,6 @@
 ﻿using CategoryManager.CategoryDeterminer;
 using CategoryManager.Model;
+using CSharpFunctionalExtensions;
 
 namespace CategoryManager.Category;
 
@@ -9,13 +10,13 @@ public class Category : ICategory
 
 	private readonly int categoryId;
 	private readonly List<Observation> observations;
-	private CategorySummary summary;
+	private Maybe<CategorySummary> summary;
 
 	private int previousRecalculation = 0;
 
-	public int[] Prototype => summary.Prototype;
+	public Maybe<int[]> Prototype => summary.Map(x => x.Prototype);
 
-	public CategorySummary Summary => summary;
+	public Maybe<CategorySummary> Summary => summary;
 
 	public int Id => categoryId;
 
@@ -24,7 +25,7 @@ public class Category : ICategory
 		this.categoryDeterminer = categoryDeterminer;
 
 		observations = new List<Observation>();
-		summary = new CategorySummary();
+		summary = Maybe.None;
 		categoryId = id;
 	}
 
@@ -37,12 +38,14 @@ public class Category : ICategory
 
 	private void DetermineAndRecalculateCategorySummary()
 	{
-		if (observations.Count >= 5 && Prototype.Length == 0)
+		//first callculation after receiving 5 obervations
+		if (observations.Count >= 5 && Prototype.HasNoValue)
 		{
 			RecalculateCategorySummary();
 			return;
 		}
 
+		//next recalculation after.....
 		if (observations.Count - previousRecalculation >= 5)
 		{
 			RecalculateCategorySummary();
@@ -59,16 +62,15 @@ public class Category : ICategory
 
 	private void RecalculateCategorySummary()
 	{
-		var result = categoryDeterminer.DetermineCategory(observations.ToArray());
+		categoryDeterminer
+			.DetermineCategory(observations.ToArray())
+			.Tap(x =>
+			{
+				summary = x;
+				previousRecalculation = observations.Count;
+			});
 
-		if (result.isSuccess)
-		{
-			summary = result.categorySummary;
-		}
-
-		previousRecalculation = observations.Count;
-
-		//to remove
+		//TODO to remove
 		DisplayCategorySummary();
 	}
 

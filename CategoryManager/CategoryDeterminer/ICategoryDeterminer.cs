@@ -1,8 +1,9 @@
 ﻿using CategoryManager.Model;
+using CSharpFunctionalExtensions;
 
 namespace CategoryManager.CategoryDeterminer;
 
 public interface ICategoryDeterminer
 {
-	(bool isSuccess, CategorySummary categorySummary) DetermineCategory(Observation[] observations);
+	Result<CategorySummary> DetermineCategory(Observation[] observations);
 }

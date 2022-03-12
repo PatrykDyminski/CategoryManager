@@ -1,4 +1,5 @@
 ﻿using CategoryManager.Model;
+using CSharpFunctionalExtensions;
 
 namespace CategoryManager.Category;
 
@@ -8,7 +9,7 @@ public interface ICategory
 
 	int Id { get; }
 
-	CategorySummary Summary { get; }
+	Maybe<CategorySummary> Summary { get; }
 
 	void DisplayCategorySummary();
 }

@@ -1,10 +1,10 @@
 ﻿using CategoryManager.Model;
 
-namespace CategoryManager.Repository;
+namespace CategoryManager.Repository.Interfaces;
 
 internal interface ICategoryRepository
 {
-	void AddObservation(Observation observation);
+	bool AddObservation(Observation observation);
 
 	void DisplaySummary();
 }

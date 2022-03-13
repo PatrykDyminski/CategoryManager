@@ -7,6 +7,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CategoryManager.Tests.RelationDeterminerTests;
 
+
+// TODO: Refactor this class
 [TestClass]
 public class SpecificationRelationTests
 {

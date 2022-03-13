@@ -1,5 +1,6 @@
 ﻿using CategoryManager.CategoryDeterminer;
 using CategoryManager.Model;
+using CategoryManager.Repository.Interfaces;
 
 namespace CategoryManager.Repository;
 
@@ -9,18 +10,23 @@ internal class CategoryRepository : ICategoryRepository
 
 	private List<Category.Category> Categories { get; }
 
+	private readonly IRelationsRepository relationsRepository;
+
 	public CategoryRepository(ICategoryDeterminer categoryDeterminer)
 	{
 		Categories = new List<Category.Category>();
+
+		relationsRepository = new RelationsRepository();
+
 		this.categoryDeterminer = categoryDeterminer;
 	}
 
-	public void AddObservation(Observation observation)
+	public bool AddObservation(Observation observation)
 	{
 		//if there is no such category observed before
 		EnsureCategoryExist(observation);
 
-		Categories
+		return Categories
 			.Single(x => x.Id == observation.CategoryId)
 			.AddObservation(observation);
 	}

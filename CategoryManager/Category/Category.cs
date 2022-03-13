@@ -29,49 +29,49 @@ public class Category : ICategory
 		categoryId = id;
 	}
 
-	public void AddObservation(Observation observation)
+	public bool AddObservation(Observation observation)
 	{
 		observations.Add(observation);
 
-		DetermineAndRecalculateCategorySummary();
+		return DetermineAndRecalculateCategorySummary();
 	}
 
-	private void DetermineAndRecalculateCategorySummary()
+	private bool DetermineAndRecalculateCategorySummary()
 	{
 		//first callculation after receiving 5 obervations
 		if (observations.Count >= 5 && Prototype.HasNoValue)
 		{
-			RecalculateCategorySummary();
-			return;
+			return RecalculateCategorySummary();
 		}
 
 		//next recalculation after.....
 		if (observations.Count - previousRecalculation >= 5)
 		{
-			RecalculateCategorySummary();
-			return;
+			return RecalculateCategorySummary();
 		}
 
 		//only for testing
 		if (observations.Count == 13)
 		{
-			RecalculateCategorySummary();
-			return;
+			return RecalculateCategorySummary();
 		}
+
+		return false;
 	}
 
-	private void RecalculateCategorySummary()
+	private bool RecalculateCategorySummary()
 	{
-		categoryDeterminer
+		var result = categoryDeterminer
 			.DetermineCategory(observations.ToArray())
 			.Tap(x =>
 			{
 				summary = x;
 				previousRecalculation = observations.Count;
+
+				DisplayCategorySummary();
 			});
 
-		//TODO to remove
-		DisplayCategorySummary();
+		return result.IsSuccess;
 	}
 
 	public void DisplayCategorySummary()

@@ -3,6 +3,7 @@ using CategoryManager.CategoryDeterminer;
 using CategoryManager.Distance;
 using CategoryManager.Model;
 using CategoryManager.Repository;
+using CategoryManager.Repository.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -48,7 +49,10 @@ static IHostBuilder CreateHostBuilder(string[] args)
 				.AddSingleton<IDistance, HammingDistance>()
 				.AddSingleton<ICandidatesExtractor, MedoidBasedCandidates>()
 				.AddSingleton<ICategoryDeterminer, BasicCategoryDeterminer>()
-				.AddSingleton<ICategoryRepository, CategoryRepository>());
+				.AddSingleton<ICategoryRepository, CategoryRepository>()
+				.AddSingleton<IRelationsRepository, RelationsRepository>()
+				//TODO Add interface
+				.AddSingleton<CategoryManager.Manager.CategoryManager>());
 }
 
 using var host = CreateHostBuilder(args).Build();
@@ -59,14 +63,14 @@ static void Run(IServiceProvider services, Observation[] observations)
 	using var serviceScope = services.CreateScope();
 	var provider = serviceScope.ServiceProvider;
 
-	var repo = provider.GetRequiredService<ICategoryRepository>();
+	var manager = provider.GetRequiredService<CategoryManager.Manager.CategoryManager>();
 
 	foreach (var obs in observations)
 	{
-		repo.AddObservation(obs);
+		manager.AddObservation(obs);
 	}
 
 	Console.WriteLine("sadasdasda");
 
-	repo.DisplaySummary();
+	//manager.DisplaySummary();
 }

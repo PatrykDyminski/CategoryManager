@@ -5,7 +5,8 @@ namespace CategoryManager.Category;
 
 public interface ICategory
 {
-	void AddObservation(Observation observation);
+	//returns true if category has been recalculated
+	bool AddObservation(Observation observation);
 
 	int Id { get; }
 

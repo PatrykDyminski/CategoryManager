@@ -52,4 +52,17 @@ public class SpecificationRelationTests
 		res.Should().BeFalse();
 	}
 
+	[TestMethod]
+	public void SRTest4()
+	{
+		var sum1 = CSUtils.CreateSummary(2, 6, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+		var sum2 = CSUtils.CreateSummary(1, 10, new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+
+		var rd = new RelationsDeterminer(new RelationFeaturesDeterminer(new HammingDistance()));
+
+		var res = rd.DetermineSpecification(sum1, sum2);
+
+		res.Should().BeFalse();
+	}
+
 }

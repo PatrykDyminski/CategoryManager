@@ -1,5 +1,6 @@
 ﻿using CategoryManager.Model;
 using CategoryManager.Repository.Interfaces;
+using CSharpFunctionalExtensions;
 
 namespace CategoryManager.Manager;
 
@@ -20,7 +21,9 @@ internal class CategoryManager
 
 		if (recalculated)
 		{
-			relationsRepository.UpdateRelations(observation.CategoryId);
+			categoryRepository
+				.GetCategorySummaryById(observation.CategoryId)
+				.Tap(x => relationsRepository.UpdateRelations(observation.CategoryId, x));
 		}
 	}
 }

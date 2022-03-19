@@ -1,6 +1,8 @@
-﻿namespace CategoryManager.Repository.Interfaces;
+﻿using CategoryManager.Model;
+
+namespace CategoryManager.Repository.Interfaces;
 
 public interface IRelationsRepository
 {
-	void UpdateRelations(int categoryId);
+	void UpdateRelations(int categoryId, CategorySummary categorySummary);
 }

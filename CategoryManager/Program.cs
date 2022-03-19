@@ -2,6 +2,8 @@
 using CategoryManager.CategoryDeterminer;
 using CategoryManager.Distance;
 using CategoryManager.Model;
+using CategoryManager.Relations;
+using CategoryManager.Relations.Features;
 using CategoryManager.Repository;
 using CategoryManager.Repository.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,6 +53,8 @@ static IHostBuilder CreateHostBuilder(string[] args)
 				.AddSingleton<ICategoryDeterminer, BasicCategoryDeterminer>()
 				.AddSingleton<ICategoryRepository, CategoryRepository>()
 				.AddSingleton<IRelationsRepository, RelationsRepository>()
+				.AddSingleton<IRelationsDeterminer, RelationsDeterminer>()
+				.AddSingleton<IRelationFeaturesDeterminer, RelationFeaturesDeterminer>()
 				//TODO Add interface
 				.AddSingleton<CategoryManager.Manager.CategoryManager>());
 }

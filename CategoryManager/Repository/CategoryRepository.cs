@@ -1,6 +1,7 @@
 ﻿using CategoryManager.CategoryDeterminer;
 using CategoryManager.Model;
 using CategoryManager.Repository.Interfaces;
+using CSharpFunctionalExtensions;
 
 namespace CategoryManager.Repository;
 
@@ -10,15 +11,11 @@ internal class CategoryRepository : ICategoryRepository
 
 	private List<Category.Category> Categories { get; }
 
-	private readonly IRelationsRepository relationsRepository;
-
 	public CategoryRepository(ICategoryDeterminer categoryDeterminer)
 	{
-		Categories = new List<Category.Category>();
-
-		relationsRepository = new RelationsRepository();
-
 		this.categoryDeterminer = categoryDeterminer;
+
+		Categories = new List<Category.Category>();
 	}
 
 	public bool AddObservation(Observation observation)
@@ -39,6 +36,15 @@ internal class CategoryRepository : ICategoryRepository
 		}
 	}
 
+	public Result<CategorySummary> GetCategorySummaryById(int id)
+	{
+		var cat = Categories
+			.SingleOrDefault(x => x.Id == id);
+
+		return cat != null
+			? cat.Summary.ToResult("Category exist but has no summary yet")
+			: Result.Failure<CategorySummary>("No such category");
+	}
 	public void DisplaySummary()
 	{
 		Categories.ForEach(x => x.DisplayCategorySummary());

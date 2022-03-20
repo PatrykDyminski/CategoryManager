@@ -45,13 +45,7 @@ public class Category : ICategory
 		}
 
 		//next recalculation after.....
-		if (observations.Count - previousRecalculation >= 5)
-		{
-			return RecalculateCategorySummary();
-		}
-
-		//only for testing
-		if (observations.Count == 13)
+		if (observations.Count - previousRecalculation >= 0.1 * previousRecalculation)
 		{
 			return RecalculateCategorySummary();
 		}
@@ -61,13 +55,16 @@ public class Category : ICategory
 
 	private bool RecalculateCategorySummary()
 	{
+		Console.WriteLine("Recalc + " + observations.Count);
+
+		//save even if no succesfull recalculation
+		previousRecalculation = observations.Count;
+
 		var result = categoryDeterminer
 			.DetermineCategory(observations.ToArray())
 			.Tap(x =>
 			{
 				summary = x;
-				previousRecalculation = observations.Count;
-
 				DisplayCategorySummary();
 			});
 

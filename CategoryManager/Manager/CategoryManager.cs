@@ -26,4 +26,12 @@ internal class CategoryManager : ICategoryManager
 				.Tap(x => relationsRepository.UpdateRelations(observation.CategoryId, x));
 		}
 	}
+
+	public void AddObservationsBatch(IEnumerable<Observation> observations)
+	{
+		foreach (var obs in observations)
+		{
+			AddObservation(obs);
+		}
+	}
 }

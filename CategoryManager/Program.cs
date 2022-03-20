@@ -70,10 +70,14 @@ static void Run(IServiceProvider services, Observation[] observations)
 
 	var manager = provider.GetRequiredService<ICategoryManager>();
 
-	foreach (var obs in observations)
-	{
-		manager.AddObservation(obs);
-	}
+	//foreach (var obs in observations)
+	//{
+	//	manager.AddObservation(obs);
+	//}
+
+	var obsbatch = CategoryManager.Utils.ObservationsGenerator.GenerateObservations(1, new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, 2, 4, 20);
+
+	manager.AddObservationsBatch(obsbatch);
 
 	Console.WriteLine("sadasdasda");
 

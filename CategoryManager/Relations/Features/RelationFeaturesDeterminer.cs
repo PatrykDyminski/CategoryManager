@@ -1,5 +1,6 @@
 ﻿using CategoryManager.Distance;
 using CategoryManager.Model;
+using CSharpFunctionalExtensions;
 
 namespace CategoryManager.Relations.Features;
 
@@ -12,7 +13,7 @@ public class RelationFeaturesDeterminer : IRelationFeaturesDeterminer
 		this.macrostructure = macrostructure;
 	}
 
-	public (bool result, double common) BoundaryCross(CategorySummary c1, CategorySummary c2, double distance = double.NaN)
+	public Maybe<double> BoundaryCross(CategorySummary c1, CategorySummary c2, Maybe<double> distance)
 	{
 		var dst = GetDistance(c1, c2, distance);
 
@@ -20,11 +21,11 @@ public class RelationFeaturesDeterminer : IRelationFeaturesDeterminer
 		var cross = c1.Tminus + c2.Tminus - dst;
 
 		return cross > 0
-			? (true, cross)
-			: (false, -1);
+			? Maybe.From(cross)
+			: Maybe.None;
 	}
 
-	public (bool result, double common) CoreCross(CategorySummary c1, CategorySummary c2, double distance = double.NaN)
+	public Maybe<double> CoreCross(CategorySummary c1, CategorySummary c2, Maybe<double> distance)
 	{
 		var dst = GetDistance(c1, c2, distance);
 
@@ -32,47 +33,46 @@ public class RelationFeaturesDeterminer : IRelationFeaturesDeterminer
 		var cross = c1.Tplus + c2.Tplus - dst;
 
 		return cross > 0
-			? (true, cross)
-			: (false, -1);
+			? Maybe.From(cross)
+			: Maybe.None;
 	}
 
-	public (bool result, double common) CoreInsideCore(CategorySummary c1, CategorySummary c2, double distance = double.NaN)
+	public Maybe<(double common, int bigger)> CoreInsideCore(CategorySummary c1, CategorySummary c2, Maybe<double> distance)
 	{
 		var dst = GetDistance(c1, c2, distance);
 
-		(CategorySummary smaller, CategorySummary bigger) = c1.Tplus < c2.Tplus
-			? (c1, c2)
-			: (c2, c1);
+		(CategorySummary smaller, CategorySummary bigger, int biggerIndex) = c1.Tplus < c2.Tplus
+			? (c1, c2, 2)
+			: (c2, c1, 1);
 
 		//CD - CM - D > Tresh
 		var inside = bigger.Tplus - smaller.Tplus - dst;
 
 		return inside > 0
-			? (true, inside)
-			: (false, -1);
+			? Maybe.From((inside, biggerIndex))
+			: Maybe.None;
 	}
 
-	public (bool result, double common) BoundaryInsideBoundary(CategorySummary c1, CategorySummary c2, double distance = double.NaN)
+	public Maybe<(double common, int bigger)> BoundaryInsideBoundary(CategorySummary c1, CategorySummary c2, Maybe<double> distance)
 	{
 		var dst = GetDistance(c1, c2, distance);
 
-		(CategorySummary smaller, CategorySummary bigger) = c1.Tminus < c2.Tminus
-			? (c1, c2)
-			: (c2, c1);
+		(CategorySummary smaller, CategorySummary bigger, int biggerIndex) = c1.Tminus < c2.Tminus
+			? (c1, c2, 2)
+			: (c2, c1, 1);
 
 		//BD - BM - D > Tresh
 		var inside = bigger.Tminus - smaller.Tminus - dst;
 
 		return inside > 0
-			? (true, inside)
-			: (false, -1);
+			? Maybe.From((inside, biggerIndex))
+			: Maybe.None;
 	}
 
-
-	private double GetDistance(CategorySummary c1, CategorySummary c2, double distance)
+	private double GetDistance(CategorySummary c1, CategorySummary c2, Maybe<double> distance)
 	{
-		return double.IsNaN(distance)
-			? macrostructure.CalculateDistance(c1.Prototype, c2.Prototype)
-			: distance;
+		return distance.HasValue
+			? distance.Value
+			: macrostructure.CalculateDistance(c1.Prototype, c2.Prototype);
 	}
 }

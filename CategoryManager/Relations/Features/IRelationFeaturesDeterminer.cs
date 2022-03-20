@@ -1,12 +1,13 @@
 ﻿using CategoryManager.Model;
+using CSharpFunctionalExtensions;
 
 namespace CategoryManager.Relations.Features
 {
 	public interface IRelationFeaturesDeterminer
 	{
-		(bool result, double common) BoundaryCross(CategorySummary c1, CategorySummary c2, double distance = double.NaN);
-		(bool result, double common) BoundaryInsideBoundary(CategorySummary c1, CategorySummary c2, double distance = double.NaN);
-		(bool result, double common) CoreCross(CategorySummary c1, CategorySummary c2, double distance = double.NaN);
-		(bool result, double common) CoreInsideCore(CategorySummary c1, CategorySummary c2, double distance = double.NaN);
+		Maybe<double> BoundaryCross(CategorySummary c1, CategorySummary c2, Maybe<double> distance);
+		Maybe<(double common, int bigger)> BoundaryInsideBoundary(CategorySummary c1, CategorySummary c2, Maybe<double> distance);
+		Maybe<double> CoreCross(CategorySummary c1, CategorySummary c2, Maybe<double> distance);
+		Maybe<(double common, int bigger)> CoreInsideCore(CategorySummary c1, CategorySummary c2, Maybe<double> distance);
 	}
 }

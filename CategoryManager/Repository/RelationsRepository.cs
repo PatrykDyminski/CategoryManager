@@ -4,7 +4,7 @@ using CategoryManager.Repository.Interfaces;
 
 namespace CategoryManager.Repository;
 
-internal class RelationsRepository : IRelationsRepository
+public class RelationsRepository : IRelationsRepository
 {
 	private readonly IRelationsDeterminer relationsDeterminer;
 
@@ -17,6 +17,18 @@ internal class RelationsRepository : IRelationsRepository
 
 		Relations = new List<Relation>();
 		KnownCategories = new Dictionary<int, CategorySummary>();
+	}
+
+	public IReadOnlyCollection<Relation> GetAllRelations()
+	{
+		return Relations;
+	}
+
+	public IReadOnlyCollection<Relation> GetRelationsForCategory(int categoryId)
+	{
+		return Relations
+			.Where(r => r.Cat1Id == categoryId || r.Cat2Id == categoryId)
+			.ToList();
 	}
 
 	public void UpdateRelations(int categoryId, CategorySummary categorySummary)
@@ -58,7 +70,7 @@ internal class RelationsRepository : IRelationsRepository
 			.Where(x => relationsDeterminer.ValidateRelation(x));
 
 		Relations = Relations
-			.Where(relation => relation.Cat1Id == categoryId || relation.Cat2Id == categoryId)
+			.Where(relation => relation.Cat1Id != categoryId && relation.Cat2Id != categoryId)
 			.Concat(part1)
 			.Concat(part2)
 			.ToList();
@@ -66,7 +78,9 @@ internal class RelationsRepository : IRelationsRepository
 
 	private void HandleNewCategory(int categoryId, CategorySummary categorySummary)
 	{
-		var listOfRelations = KnownCategories.SelectMany(x => relationsDeterminer.GetRelationsForCategories(categoryId, x.Key, categorySummary, x.Value));
+		var listOfRelations = KnownCategories
+			.SelectMany(x => relationsDeterminer
+				.GetRelationsForCategories(categoryId, x.Key, categorySummary, x.Value));
 
 		if (listOfRelations.Any())
 		{

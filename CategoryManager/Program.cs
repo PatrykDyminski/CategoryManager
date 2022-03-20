@@ -1,6 +1,7 @@
 ﻿using CategoryManager.Candidates;
 using CategoryManager.CategoryDeterminer;
 using CategoryManager.Distance;
+using CategoryManager.Manager;
 using CategoryManager.Model;
 using CategoryManager.Relations;
 using CategoryManager.Relations.Features;
@@ -56,7 +57,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
 				.AddSingleton<IRelationsDeterminer, RelationsDeterminer>()
 				.AddSingleton<IRelationFeaturesDeterminer, RelationFeaturesDeterminer>()
 				//TODO Add interface
-				.AddSingleton<CategoryManager.Manager.CategoryManager>());
+				.AddSingleton<ICategoryManager, CategoryManager.Manager.CategoryManager>());
 }
 
 using var host = CreateHostBuilder(args).Build();
@@ -67,7 +68,7 @@ static void Run(IServiceProvider services, Observation[] observations)
 	using var serviceScope = services.CreateScope();
 	var provider = serviceScope.ServiceProvider;
 
-	var manager = provider.GetRequiredService<CategoryManager.Manager.CategoryManager>();
+	var manager = provider.GetRequiredService<ICategoryManager>();
 
 	foreach (var obs in observations)
 	{

@@ -4,7 +4,7 @@ using CSharpFunctionalExtensions;
 
 namespace CategoryManager.Manager;
 
-internal class CategoryManager
+internal class CategoryManager : ICategoryManager
 {
 	private readonly ICategoryRepository categoryRepository;
 	private readonly IRelationsRepository relationsRepository;

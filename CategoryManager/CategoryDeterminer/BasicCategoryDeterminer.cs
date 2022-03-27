@@ -17,7 +17,7 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 		this.candidatesExtractor = candidatesExtractor;
 	}
 
-	public Result<CategorySummary> DetermineCategory(Observation[] observations)
+	public Result<CategoryDeterminationResultDTO> DetermineCategory(Observation[] observations)
 	{
 		int[] prototype = Array.Empty<int>();
 
@@ -27,6 +27,7 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 		var positiveObservationsSet = positiveObservations.DistinctBy(x => x.ObservedObject, new IntArrayComparer());
 		var negativeObservationsSet = negativeObservations.DistinctBy(x => x.ObservedObject, new IntArrayComparer());
 
+		//TODO add check if positive is never observed as negative
 		var candidates = candidatesExtractor.ExtractCandidates(
 			positiveObservations
 				.Select(x => x.ObservedObject)
@@ -35,15 +36,21 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 		foreach (var prototypeCandidate in candidates)
 		{
 			var positiveDistances = positiveObservationsSet
-				.Select(x => new { x.ObservedObject, Distance = macrostructure.CalculateDistance(prototypeCandidate, x.ObservedObject) });
+				.Select(x => new { 
+					Observation = x, 
+					Distance = macrostructure.CalculateDistance(prototypeCandidate, x.ObservedObject) 
+				});
 
 			var negativeDistances = negativeObservationsSet
-				.Select(x => new { x.ObservedObject, Distance = macrostructure.CalculateDistance(prototypeCandidate, x.ObservedObject) });
+				.Select(x => new { 
+					Observation = x, 
+					Distance = macrostructure.CalculateDistance(prototypeCandidate, x.ObservedObject) 
+				});
 
 			//not enough observations
 			if(!positiveDistances.Any() || !negativeDistances.Any())
 			{
-				return Result.Failure<CategorySummary>("Could not determine category - not enough observations");
+				return Result.Failure<CategoryDeterminationResultDTO>("Could not determine category - not enough observations");
 			}
 
 			var minimalNegativeDistance = negativeDistances.MinBy(x => x.Distance)!.Distance;
@@ -61,44 +68,50 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 
 			if (tauPlus.HasNoValue || tauMinus.HasNoValue)
 			{
-				return Result.Failure<CategorySummary>("Could not determine category");
+				return Result.Failure<CategoryDeterminationResultDTO>("Could not determine category");
 			}
 
 			var core = tauPlus.GetValueOrDefault(
 				tp => positiveDistances
 					.Where(x => x.Distance <= tp)
-					.Select(y => y.ObservedObject), 
-				Array.Empty<int[]>());
+					.Select(y => y.Observation), 
+				Array.Empty<Observation>());
 
 			var outer = tauMinus.GetValueOrDefault(
 				tm => negativeDistances
 					.Where(x => x.Distance >= tm)
-					.Select(y => y.ObservedObject),
-				Array.Empty<int[]>());
+					.Select(y => y.Observation),
+				Array.Empty<Observation>());
 
 			//boundary = positive and negative objects not present in the core and outer
 			var boundary = positiveObservationsSet
-				.Select(x => x.ObservedObject)
-				.Concat(negativeObservationsSet
-					.Select(x => x.ObservedObject))
+				.Concat(negativeObservationsSet)
 				.Except(core
-					.Concat(outer), new IntArrayComparer());
+					.Concat(outer), new ObservationArrayComparer());
 
 			//more objects in the core than positive objects in the boundary
 			if (core.Count() >= positiveObservationsSet
-				.Select(x => x.ObservedObject)
-				.Intersect(boundary, new IntArrayComparer())
+				.Intersect(boundary, new ObservationArrayComparer())
 				.Count())
 			{
-				return new CategorySummary
+				var summary = new CategorySummary
 				{
 					Prototype = prototypeCandidate,
 					Tplus = tauPlus.Value,
 					Tminus = tauMinus.Value,
 				};
+
+				var ret = new CategoryDeterminationResultDTO
+				{
+					Summary = summary,
+					CoreObservations = core.ToList(),
+					BoundaryObservations = boundary.ToList()
+				};
+
+				return ret;
 			}
 		}
 
-		return Result.Failure<CategorySummary>("Could not determine category");
+		return Result.Failure<CategoryDeterminationResultDTO>("Could not determine category");
 	}
 }

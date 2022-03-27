@@ -5,5 +5,5 @@ namespace CategoryManager.CategoryDeterminer;
 
 public interface ICategoryDeterminer
 {
-	Result<CategorySummary> DetermineCategory(Observation[] observations);
+	Result<CategoryDeterminationResultDTO> DetermineCategory(Observation[] observations);
 }

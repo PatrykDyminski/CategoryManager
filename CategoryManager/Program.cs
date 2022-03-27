@@ -1,4 +1,5 @@
 ﻿using CategoryManager.Candidates;
+using CategoryManager.Category.Factory;
 using CategoryManager.CategoryDeterminer;
 using CategoryManager.Distance;
 using CategoryManager.Manager;
@@ -56,7 +57,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
 				.AddSingleton<IRelationsRepository, RelationsRepository>()
 				.AddSingleton<IRelationsDeterminer, RelationsDeterminer>()
 				.AddSingleton<IRelationFeaturesDeterminer, RelationFeaturesDeterminer>()
-				//TODO Add interface
+				.AddSingleton<ICategoryFactory, CategoryFactory>()
 				.AddSingleton<ICategoryManager, CategoryManager.Manager.CategoryManager>());
 }
 

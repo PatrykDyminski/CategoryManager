@@ -52,9 +52,12 @@ public class BasicCategoryDeterminerTests
 		var category = cate.DetermineCategory(observations);
 
 		category.IsSuccess.Should().BeTrue();
-		category.Value.Tminus.Should().Be(3);
-		category.Value.Tplus.Should().Be(1);
+		category.Value.Summary.Tminus.Should().Be(3);
+		category.Value.Summary.Tplus.Should().Be(1);
 
-		category.Value.Prototype.AsString().Should().Be("0011");
+		category.Value.CoreObservations.Count.Should().Be(2);
+		category.Value.BoundaryObservations.Count.Should().Be(3);
+
+		category.Value.Summary.Prototype.AsString().Should().Be("0011");
 	}
 }

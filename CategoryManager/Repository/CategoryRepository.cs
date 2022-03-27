@@ -1,4 +1,4 @@
-﻿using CategoryManager.CategoryDeterminer;
+﻿using CategoryManager.Category.Factory;
 using CategoryManager.Model;
 using CategoryManager.Repository.Interfaces;
 using CSharpFunctionalExtensions;
@@ -7,13 +7,13 @@ namespace CategoryManager.Repository;
 
 internal class CategoryRepository : ICategoryRepository
 {
-	private readonly ICategoryDeterminer categoryDeterminer;
+	private readonly ICategoryFactory categoryFactory;
 
 	private List<Category.Category> Categories { get; }
 
-	public CategoryRepository(ICategoryDeterminer categoryDeterminer)
+	public CategoryRepository(ICategoryFactory categoryFactory)
 	{
-		this.categoryDeterminer = categoryDeterminer;
+		this.categoryFactory = categoryFactory;
 
 		Categories = new List<Category.Category>();
 	}
@@ -32,7 +32,7 @@ internal class CategoryRepository : ICategoryRepository
 	{
 		if (!Categories.Where(x => x.Id == observation.CategoryId).Any())
 		{
-			Categories.Add(new Category.Category(categoryDeterminer, observation.CategoryId));
+			Categories.Add(categoryFactory.CreateCategory(observation.CategoryId));
 		}
 	}
 

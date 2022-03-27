@@ -49,7 +49,7 @@ public class CategoryTests
 	{
 		var catdet = new BasicCategoryDeterminer(new HammingDistance(), new MedoidBasedCandidates(new HammingDistance()));
 
-		var category = new Category.Category(catdet, 1);
+		var category = new Category.Category(catdet, new HammingDistance(), 1);
 
 		foreach (var obs in observations)
 		{

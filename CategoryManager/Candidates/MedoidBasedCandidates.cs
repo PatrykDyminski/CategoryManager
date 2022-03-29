@@ -15,7 +15,7 @@ public class MedoidBasedCandidates : ICandidatesExtractor
 	public int[][] ExtractCandidates(int[][] candidates, int[][] universe = null)
 	{
 		var dict = candidates
-			.GroupBy(x => x, new IntArrayComparer())
+			.GroupBy(x => x, new ObservedObjectComparer())
 			.Select(x => new { x.Key, Count = x.Count() })
 			.ToDictionary(x => x.Key, x => x.Count);
 

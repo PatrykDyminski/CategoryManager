@@ -24,8 +24,8 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 		var positiveObservations = observations.Where(x => x.IsRelated);
 		var negativeObservations = observations.Where(x => !x.IsRelated);
 
-		var positiveObservationsSet = positiveObservations.DistinctBy(x => x.ObservedObject, new IntArrayComparer());
-		var negativeObservationsSet = negativeObservations.DistinctBy(x => x.ObservedObject, new IntArrayComparer());
+		var positiveObservationsSet = positiveObservations.DistinctBy(x => x.ObservedObject, new ObservedObjectComparer());
+		var negativeObservationsSet = negativeObservations.DistinctBy(x => x.ObservedObject, new ObservedObjectComparer());
 
 		//TODO add check if positive is never observed as negative
 		var candidates = candidatesExtractor.ExtractCandidates(
@@ -87,11 +87,11 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 			var boundary = positiveObservationsSet
 				.Concat(negativeObservationsSet)
 				.Except(core
-					.Concat(outer), new ObservationArrayComparer());
+					.Concat(outer), new ObservationComparer());
 
 			//more objects in the core than positive objects in the boundary
 			if (core.Count() >= positiveObservationsSet
-				.Intersect(boundary, new ObservationArrayComparer())
+				.Intersect(boundary, new ObservationComparer())
 				.Count())
 			{
 				var summary = new CategorySummary
@@ -104,8 +104,8 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 				var ret = new CategoryDeterminationResultDTO
 				{
 					Summary = summary,
-					CoreObservations = core.ToList(),
-					BoundaryObservations = boundary.ToList()
+					CoreObservationSet = core.ToHashSet(),
+					BoundaryObservationSet = boundary.ToHashSet()
 				};
 
 				return ret;

@@ -5,6 +5,7 @@ using CategoryManager.Model;
 using CategoryManager.Utils;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace CategoryManager.Tests;
 
@@ -55,8 +56,18 @@ public class BasicCategoryDeterminerTests
 		category.Value.Summary.Tminus.Should().Be(3);
 		category.Value.Summary.Tplus.Should().Be(1);
 
-		category.Value.CoreObservations.Count.Should().Be(2);
-		category.Value.BoundaryObservations.Count.Should().Be(3);
+		var coreset = category.Value.CoreObservationSet.Select(x => x.ObservedObject.AsString()).ToHashSet();
+		var boundaryset = category.Value.BoundaryObservationSet.Select(x => x.ObservedObject.AsString()).ToHashSet();
+
+		coreset.Count.Should().Be(2);
+		boundaryset.Count.Should().Be(3);
+
+		coreset.Contains("0010").Should().BeTrue();
+		coreset.Contains("0011").Should().BeTrue();
+
+		boundaryset.Contains("0000").Should().BeTrue();
+		boundaryset.Contains("0101").Should().BeTrue();
+		boundaryset.Contains("1001").Should().BeTrue();
 
 		category.Value.Summary.Prototype.AsString().Should().Be("0011");
 	}

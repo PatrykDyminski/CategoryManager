@@ -1,6 +1,7 @@
 ﻿using CategoryManager.CategoryDeterminer;
 using CategoryManager.Distance;
 using CategoryManager.Model;
+using CategoryManager.Utils;
 using CSharpFunctionalExtensions;
 
 namespace CategoryManager.Category;
@@ -14,8 +15,8 @@ public class Category : ICategory
 	private readonly List<Observation> observations;
 	private Maybe<CategorySummary> summary;
 
-	private readonly List<Observation> coreObservations;
-	private readonly List<Observation> boundaryObservations;
+	private readonly ISet<Observation> coreObservationSet;
+	private readonly ISet<Observation> boundaryObservationSet;
 
 	private int previousRecalculation = 0;
 
@@ -31,8 +32,9 @@ public class Category : ICategory
 		this.distance = distance;
 
 		observations = new List<Observation>();
-		coreObservations = new List<Observation>();
-		boundaryObservations = new List<Observation>();
+
+		coreObservationSet = new HashSet<Observation>(new ObservationComparerWithRelation());
+		boundaryObservationSet = new HashSet<Observation>(new ObservationComparerWithRelation());
 
 		summary = Maybe.None;
 		categoryId = id;
@@ -40,13 +42,9 @@ public class Category : ICategory
 
 	public bool AddObservation(Observation observation)
 	{
-		var hasRecalculated = DetermineAndRecalculateCategorySummary();
+		observations.Add(observation);
 
-		//jeśli nie zrekalkulowano. Bo w przypadku rekalkulacji obserwacja przypisana w metodzie wyżej
-		if (!hasRecalculated)
-		{
-			AddObservationToProperGroup(observation);
-		}
+		var hasRecalculated = DetermineAndRecalculateCategorySummary();
 
 		return hasRecalculated;
 	}
@@ -68,27 +66,6 @@ public class Category : ICategory
 		return false;
 	}
 
-	private void AddObservationToProperGroup(Observation observation)
-	{
-		//TODO currently observations are duplicated. Handle it.
-		observations.Add(observation);
-
-		if (summary.HasValue)
-		{
-			var distanceFromProto = distance.CalculateDistance(summary.Value.Prototype, observation.ObservedObject);
-			if (distanceFromProto < summary.Value.Tplus)
-			{
-				coreObservations.Add(observation);
-			}
-			else if (distanceFromProto < summary.Value.Tminus)
-			{
-				//TODO Podzielić Boundary
-				boundaryObservations.Add(observation);
-			}
-			//TODO co z outer?
-		}
-	}
-
 	private bool RecalculateCategorySummary()
 	{
 		Console.WriteLine("Recalc + " + observations.Count);
@@ -101,8 +78,8 @@ public class Category : ICategory
 			.Tap(x =>
 			{
 				summary = x.Summary;
-				coreObservations.AddRange(x.CoreObservations);
-				boundaryObservations.AddRange(x.BoundaryObservations);
+				coreObservationSet.UnionWith(x.CoreObservationSet);
+				boundaryObservationSet.UnionWith(x.BoundaryObservationSet);
 
 				DisplayCategorySummary();
 			});

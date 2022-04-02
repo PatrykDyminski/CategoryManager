@@ -22,8 +22,8 @@ internal class CategoryManager : ICategoryManager
 		if (recalculated)
 		{
 			categoryRepository
-				.GetCategorySummaryById(observation.CategoryId)
-				.Tap(x => relationsRepository.UpdateRelations(observation.CategoryId, x));
+				.GetCategoryById(observation.CategoryId)
+				.Tap(category => relationsRepository.UpdateRelations(category));
 		}
 	}
 

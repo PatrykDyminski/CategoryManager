@@ -1,4 +1,5 @@
-﻿using CategoryManager.Model;
+﻿using CategoryManager.Category;
+using CategoryManager.Model;
 using CategoryManager.Relations;
 using CategoryManager.Repository.Interfaces;
 
@@ -28,15 +29,15 @@ public class RelationsRepository : IRelationsRepository
 			.ToList();
 	}
 
-	public void UpdateRelations(int categoryId, CategorySummary categorySummary)
+	public void UpdateRelations(ICategory category)
 	{
-		if (IsNewCategory(categoryId))
+		if (IsNewCategory(category.Id))
 		{
-			HandleNewCategory(categoryId, categorySummary);
+			HandleNewCategory(category.Id, category.Summary.Value);
 		}
 		else
 		{
-			HandleExistingRelationsForCategory(categoryId, categorySummary);
+			HandleExistingRelationsForCategory(category.Id, category.Summary.Value);
 		}
 	}
 

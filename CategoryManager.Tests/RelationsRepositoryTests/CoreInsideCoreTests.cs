@@ -4,6 +4,7 @@ using CategoryManager.Relations;
 using CategoryManager.Relations.Features;
 using CategoryManager.Repository;
 using CategoryManager.Repository.Interfaces;
+using CategoryManager.Tests.TestCategory;
 using CategoryManager.Tests.Utils;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -31,10 +32,10 @@ public class RelationsRepositoryAddingTests
 		IRelationsRepository relationsRepository = new RelationsRepository(relDet);
 
 		CategorySummary sum1 = CSUtils.CreateSummary(1, 3, new int[] { 0, 0, 0, 0 });
-		CategorySummary sum2 = CSUtils.CreateSummary(2, 6, new int[] { 0, 0, 0, 0 });
+		CategoryMock category = new(1, sum1, null, null);
 
 		//Act
-		relationsRepository.UpdateRelations(1, sum1);
+		relationsRepository.UpdateRelations(category);
 
 		//Assert
 		relationsRepository.GetRelationsForCategory(1).Should().BeEmpty();
@@ -49,9 +50,13 @@ public class RelationsRepositoryAddingTests
 		CategorySummary sum1 = CSUtils.CreateSummary(1, 3, new int[] { 0, 0, 0, 0 });
 		CategorySummary sum2 = CSUtils.CreateSummary(2, 6, new int[] { 0, 0, 0, 0 });
 
+		CategoryMock category1 = new(1, sum1, null, null);
+		CategoryMock category2 = new(2, sum2, null, null);
+
+
 		//Act
-		relationsRepository.UpdateRelations(1, sum1);
-		relationsRepository.UpdateRelations(2, sum2);
+		relationsRepository.UpdateRelations(category1);
+		relationsRepository.UpdateRelations(category2);
 
 		//Assert
 		var rels1 = relationsRepository.GetRelationsForCategory(1);
@@ -75,11 +80,16 @@ public class RelationsRepositoryAddingTests
 
 		CategorySummary sum1_2 = CSUtils.CreateSummary(1, 7, new int[] { 1, 1, 1, 1 });
 
-		//Act
-		relationsRepository.UpdateRelations(1, sum1);
-		relationsRepository.UpdateRelations(2, sum2);
+		CategoryMock category1 = new(1, sum1, null, null);
+		CategoryMock category2 = new(2, sum2, null, null);
 
-		relationsRepository.UpdateRelations(1, sum1_2);
+		CategoryMock category1_2 = new(1, sum1_2, null, null);
+
+		//Act
+		relationsRepository.UpdateRelations(category1);
+		relationsRepository.UpdateRelations(category2);
+
+		relationsRepository.UpdateRelations(category1_2);
 
 		//Assert
 		var rels1 = relationsRepository.GetRelationsForCategory(1);
@@ -100,11 +110,16 @@ public class RelationsRepositoryAddingTests
 
 		CategorySummary sum1_2 = CSUtils.CreateSummary(1, 4, new int[] { 1, 0, 0, 0 });
 
-		//Act
-		relationsRepository.UpdateRelations(1, sum1);
-		relationsRepository.UpdateRelations(2, sum2);
+		CategoryMock category1 = new(1, sum1, null, null);
+		CategoryMock category2 = new(2, sum2, null, null);
 
-		relationsRepository.UpdateRelations(1, sum1_2);
+		CategoryMock category1_2 = new(1, sum1_2, null, null);
+
+		//Act
+		relationsRepository.UpdateRelations(category1);
+		relationsRepository.UpdateRelations(category2);
+
+		relationsRepository.UpdateRelations(category1_2);
 
 		//Assert
 		var rels1 = relationsRepository.GetRelationsForCategory(1);

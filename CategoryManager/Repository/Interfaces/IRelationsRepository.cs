@@ -1,10 +1,11 @@
-﻿using CategoryManager.Model;
+﻿using CategoryManager.Category;
+using CategoryManager.Model;
 
 namespace CategoryManager.Repository.Interfaces;
 
 public interface IRelationsRepository
 {
-	void UpdateRelations(int categoryId, CategorySummary categorySummary);
+	void UpdateRelations(ICategory category);
 
 	IReadOnlyCollection<Relation> GetAllRelations();
 

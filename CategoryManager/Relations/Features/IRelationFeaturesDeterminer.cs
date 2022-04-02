@@ -9,5 +9,7 @@ namespace CategoryManager.Relations.Features
 		Maybe<(double common, int bigger)> BoundaryInsideBoundary(CategorySummary c1, CategorySummary c2, Maybe<double> distance);
 		Maybe<double> CoreCross(CategorySummary c1, CategorySummary c2, Maybe<double> distance);
 		Maybe<(double common, int bigger)> CoreInsideCore(CategorySummary c1, CategorySummary c2, Maybe<double> distance);
+
+		Maybe<double> IntersectionRatio(ISet<Observation> observations1, ISet<Observation> observations2);
 	}
 }

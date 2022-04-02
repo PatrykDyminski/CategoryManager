@@ -1,4 +1,5 @@
-﻿using CategoryManager.Category.Factory;
+﻿using CategoryManager.Category;
+using CategoryManager.Category.Factory;
 using CategoryManager.Model;
 using CategoryManager.Repository.Interfaces;
 using CSharpFunctionalExtensions;
@@ -9,13 +10,13 @@ internal class CategoryRepository : ICategoryRepository
 {
 	private readonly ICategoryFactory categoryFactory;
 
-	private List<Category.Category> Categories { get; }
+	private List<ICategory> Categories { get; }
 
 	public CategoryRepository(ICategoryFactory categoryFactory)
 	{
 		this.categoryFactory = categoryFactory;
 
-		Categories = new List<Category.Category>();
+		Categories = new List<ICategory>();
 	}
 
 	public bool AddObservation(Observation observation)
@@ -28,14 +29,6 @@ internal class CategoryRepository : ICategoryRepository
 			.AddObservation(observation);
 	}
 
-	private void EnsureCategoryExist(Observation observation)
-	{
-		if (!Categories.Where(x => x.Id == observation.CategoryId).Any())
-		{
-			Categories.Add(categoryFactory.CreateCategory(observation.CategoryId));
-		}
-	}
-
 	public Result<CategorySummary> GetCategorySummaryById(int id)
 	{
 		var cat = Categories
@@ -45,8 +38,27 @@ internal class CategoryRepository : ICategoryRepository
 			? cat.Summary.ToResult("Category exist but has no summary yet")
 			: Result.Failure<CategorySummary>("No such category");
 	}
+
+	public Result<ICategory> GetCategoryById(int id)
+	{
+		var cat = Categories
+			.SingleOrDefault(x => x.Id == id);
+
+		return cat != null
+			? Result.Success(cat)
+			: Result.Failure<ICategory>("No such category");
+	}
+
 	public void DisplaySummary()
 	{
 		Categories.ForEach(x => x.DisplayCategorySummary());
+	}
+
+	private void EnsureCategoryExist(Observation observation)
+	{
+		if (!Categories.Where(x => x.Id == observation.CategoryId).Any())
+		{
+			Categories.Add(categoryFactory.CreateCategory(observation.CategoryId));
+		}
 	}
 }

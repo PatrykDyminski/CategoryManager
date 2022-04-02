@@ -3,6 +3,7 @@ using CategoryManager.Distance;
 using CategoryManager.Model;
 using CategoryManager.Utils;
 using CSharpFunctionalExtensions;
+using System.Collections.Immutable;
 
 namespace CategoryManager.Category;
 
@@ -49,6 +50,21 @@ public class Category : ICategory
 		return hasRecalculated;
 	}
 
+  public Maybe<ImmutableHashSet<Observation>> GetCoreObservations() => 
+		coreObservationSet.Any()
+      ? Maybe.From(coreObservationSet.ToImmutableHashSet())
+      : Maybe.None;
+
+  public Maybe<ImmutableHashSet<Observation>> GetPositiveBoundaryObservations() =>
+		boundaryObservationSet.Any()
+      ? Maybe.From(coreObservationSet.ToImmutableHashSet())
+      : Maybe.None;
+
+  public void DisplayCategorySummary()
+	{
+		Console.WriteLine(summary.ToString());
+	}
+
 	private bool DetermineAndRecalculateCategorySummary()
 	{
 		//first callculation after receiving 5 obervations
@@ -85,10 +101,5 @@ public class Category : ICategory
 			});
 
 		return result.IsSuccess;
-	}
-
-	public void DisplayCategorySummary()
-	{
-		Console.WriteLine(summary.ToString());
 	}
 }

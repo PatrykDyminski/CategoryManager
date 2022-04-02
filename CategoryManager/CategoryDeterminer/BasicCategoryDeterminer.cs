@@ -3,6 +3,7 @@ using CategoryManager.Distance;
 using CategoryManager.Model;
 using CategoryManager.Utils;
 using CSharpFunctionalExtensions;
+using System.Collections.Immutable;
 
 namespace CategoryManager.CategoryDeterminer;
 
@@ -104,8 +105,8 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
 				var ret = new CategoryDeterminationResultDTO
 				{
 					Summary = summary,
-					CoreObservationSet = core.ToHashSet(),
-					BoundaryObservationSet = boundary.ToHashSet()
+					CoreObservationSet = core.ToImmutableHashSet(),
+					BoundaryObservationSet = boundary.ToImmutableHashSet()
 				};
 
 				return ret;

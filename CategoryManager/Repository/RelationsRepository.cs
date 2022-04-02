@@ -19,12 +19,9 @@ public class RelationsRepository : IRelationsRepository
 		KnownCategories = new Dictionary<int, CategorySummary>();
 	}
 
-	public IReadOnlyCollection<Relation> GetAllRelations()
-	{
-		return Relations;
-	}
+  public IReadOnlyCollection<Relation> GetAllRelations() => Relations;
 
-	public IReadOnlyCollection<Relation> GetRelationsForCategory(int categoryId)
+  public IReadOnlyCollection<Relation> GetRelationsForCategory(int categoryId)
 	{
 		return Relations
 			.Where(r => r.Cat1Id == categoryId || r.Cat2Id == categoryId)

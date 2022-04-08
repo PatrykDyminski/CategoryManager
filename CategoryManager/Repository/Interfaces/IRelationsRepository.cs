@@ -1,5 +1,5 @@
 ﻿using CategoryManager.Category;
-using CategoryManager.Model;
+using CategoryManager.Relations;
 
 namespace CategoryManager.Repository.Interfaces;
 
@@ -7,7 +7,7 @@ public interface IRelationsRepository
 {
 	void UpdateRelations(ICategory category);
 
-	IReadOnlyCollection<Relation> GetAllRelations();
+	IReadOnlyCollection<IRelation> GetAllRelations();
 
-	IReadOnlyCollection<Relation> GetRelationsForCategory(int categoryId);
+	IReadOnlyCollection<IRelation> GetRelationsForCategory(int categoryId);
 }

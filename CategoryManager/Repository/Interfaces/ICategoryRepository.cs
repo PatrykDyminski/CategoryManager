@@ -4,7 +4,7 @@ using CSharpFunctionalExtensions;
 
 namespace CategoryManager.Repository.Interfaces;
 
-internal interface ICategoryRepository
+public interface ICategoryRepository
 {
 	Result<CategorySummary> GetCategorySummaryById(int id);
 

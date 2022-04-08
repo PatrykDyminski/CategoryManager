@@ -4,8 +4,9 @@ using CategoryManager.CategoryDeterminer;
 using CategoryManager.Distance;
 using CategoryManager.Manager;
 using CategoryManager.Model;
-using CategoryManager.Relations;
+using CategoryManager.Relations.Determiner;
 using CategoryManager.Relations.Features;
+using CategoryManager.Relations.Validator;
 using CategoryManager.Repository;
 using CategoryManager.Repository.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,6 +54,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
 				.AddSingleton<IDistance, HammingDistance>()
 				.AddSingleton<ICandidatesExtractor, MedoidBasedCandidates>()
 				.AddSingleton<ICategoryDeterminer, BasicCategoryDeterminer>()
+				.AddTransient<IRelationValidator, RelationValidator>()
 				.AddSingleton<ICategoryRepository, CategoryRepository>()
 				.AddSingleton<IRelationsRepository, RelationsRepository>()
 				.AddSingleton<IRelationsDeterminer, RelationsDeterminer>()

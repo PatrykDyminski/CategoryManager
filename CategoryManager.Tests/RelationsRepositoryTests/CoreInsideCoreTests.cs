@@ -1,9 +1,15 @@
-﻿using CategoryManager.Distance;
+﻿using CategoryManager.Candidates;
+using CategoryManager.Category.Factory;
+using CategoryManager.CategoryDeterminer;
+using CategoryManager.Distance;
 using CategoryManager.Model;
-using CategoryManager.Relations;
+using CategoryManager.Relations.Determiner;
 using CategoryManager.Relations.Features;
+using CategoryManager.Relations.Types;
+using CategoryManager.Relations.Validator;
 using CategoryManager.Repository;
 using CategoryManager.Repository.Interfaces;
+using CategoryManager.Tests.Mocks;
 using CategoryManager.Tests.TestCategory;
 using CategoryManager.Tests.Utils;
 using FluentAssertions;
@@ -29,7 +35,8 @@ public class RelationsRepositoryAddingTests
 	public void AddingNewCategory()
 	{
 		//Arrange
-		IRelationsRepository relationsRepository = new RelationsRepository(relDet);
+		var catRepo = new CategoryRepository(new CategoryFactory( new HammingDistance(), new BasicCategoryDeterminer(new HammingDistance(), new MedoidBasedCandidates(new HammingDistance()))));
+		IRelationsRepository relationsRepository = new RelationsRepository(relDet, catRepo, new RelationValidator(catRepo, relDet));
 
 		CategorySummary sum1 = CSUtils.CreateSummary(1, 3, new int[] { 0, 0, 0, 0 });
 		CategoryMock category = new(1, sum1, null, null);
@@ -45,7 +52,8 @@ public class RelationsRepositoryAddingTests
 	public void Adding2NewCategories_OneRelation_Specification()
 	{
 		//Arrange
-		IRelationsRepository relationsRepository = new RelationsRepository(relDet);
+		var catRepo = new CategoryRepositoryMock();
+		IRelationsRepository relationsRepository = new RelationsRepository(relDet, catRepo, new RelationValidator(catRepo, relDet));
 
 		CategorySummary sum1 = CSUtils.CreateSummary(1, 3, new int[] { 0, 0, 0, 0 });
 		CategorySummary sum2 = CSUtils.CreateSummary(2, 6, new int[] { 0, 0, 0, 0 });
@@ -53,6 +61,8 @@ public class RelationsRepositoryAddingTests
 		CategoryMock category1 = new(1, sum1, null, null);
 		CategoryMock category2 = new(2, sum2, null, null);
 
+		catRepo.AddCategory(category1);
+		catRepo.AddCategory(category2);
 
 		//Act
 		relationsRepository.UpdateRelations(category1);
@@ -65,15 +75,16 @@ public class RelationsRepositoryAddingTests
 		rels1.Should().HaveCount(1);
 		rels2.Should().HaveCount(1);
 
-		rels1.ToList()[0].relationType.Should().Be(RelationType.Specification);
-		rels2.ToList()[0].relationType.Should().Be(RelationType.Specification);
+		rels1.ToList()[0].Should().BeOfType<SpecificationRelation>();
+		rels2.ToList()[0].Should().BeOfType<SpecificationRelation>();
 	}
 
 	[TestMethod]
 	public void Adding2NewCategories_ThenUpdate_OneRelation_ThenZero()
 	{
 		//Arrange
-		IRelationsRepository relationsRepository = new RelationsRepository(relDet);
+		var catRepo = new CategoryRepository(new CategoryFactory(new HammingDistance(), new BasicCategoryDeterminer(new HammingDistance(), new MedoidBasedCandidates(new HammingDistance()))));
+		IRelationsRepository relationsRepository = new RelationsRepository(relDet, catRepo, new RelationValidator(catRepo, relDet));
 
 		CategorySummary sum1 = CSUtils.CreateSummary(1, 3, new int[] { 0, 0, 0, 0 });
 		CategorySummary sum2 = CSUtils.CreateSummary(2, 6, new int[] { 0, 0, 0, 0 });
@@ -103,7 +114,8 @@ public class RelationsRepositoryAddingTests
 	public void Adding2NewCategories_ThenUpdateOneRelationPrototype_RelationPersists()
 	{
 		//Arrange
-		IRelationsRepository relationsRepository = new RelationsRepository(relDet);
+		var catRepo = new CategoryRepositoryMock();
+		IRelationsRepository relationsRepository = new RelationsRepository(relDet, catRepo, new RelationValidator(catRepo, relDet));
 
 		CategorySummary sum1 = CSUtils.CreateSummary(1, 3, new int[] { 0, 0, 0, 0 });
 		CategorySummary sum2 = CSUtils.CreateSummary(3, 6, new int[] { 0, 0, 0, 0 });
@@ -115,9 +127,14 @@ public class RelationsRepositoryAddingTests
 
 		CategoryMock category1_2 = new(1, sum1_2, null, null);
 
+		catRepo.AddCategory(category1);
+		catRepo.AddCategory(category2);
+
 		//Act
 		relationsRepository.UpdateRelations(category1);
 		relationsRepository.UpdateRelations(category2);
+
+		catRepo.AddCategory(category1_2);
 
 		relationsRepository.UpdateRelations(category1_2);
 
@@ -127,11 +144,5 @@ public class RelationsRepositoryAddingTests
 
 		rels1.Should().HaveCount(1);
 		rels2.Should().HaveCount(1);
-
-		var proto1 = rels1.ToList()[0].CategorySummary1.Prototype;
-		var proto2 = rels1.ToList()[0].CategorySummary2.Prototype;
-
-		proto1.Should().BeEquivalentTo(new int[] { 0, 0, 0, 0 });
-		proto2.Should().BeEquivalentTo(new int[] { 1, 0, 0, 0 });
 	}
 }

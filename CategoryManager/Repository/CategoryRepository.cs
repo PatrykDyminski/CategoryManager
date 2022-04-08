@@ -6,7 +6,7 @@ using CSharpFunctionalExtensions;
 
 namespace CategoryManager.Repository;
 
-internal class CategoryRepository : ICategoryRepository
+public class CategoryRepository : ICategoryRepository
 {
 	private readonly ICategoryFactory categoryFactory;
 

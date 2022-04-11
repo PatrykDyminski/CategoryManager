@@ -1,4 +1,5 @@
-﻿using CategoryManager.Distance;
+﻿using CategoryManager.Category;
+using CategoryManager.Distance;
 using CategoryManager.Model;
 using CategoryManager.Utils;
 using CSharpFunctionalExtensions;
@@ -70,21 +71,41 @@ public class RelationFeaturesDeterminer : IRelationFeaturesDeterminer
       : Maybe.None;
   }
 
-  public Maybe<double> IntersectionRatio(ISet<Observation> observations1, ISet<Observation> observations2)
+  public double IntersectionRatio(ISet<Observation> observations1, ISet<Observation> observations2)
   {
     var intersection = observations1.Intersect(observations2, new ObservationComparer());
     var sum = observations1.Union(observations2, new ObservationComparer());
 
     if (intersection.Any() && sum.Any())
     {
-      double ratio = (double)intersection.Count() / (double)sum.Count();
-      
-      return Maybe<double>.From(ratio);
+      return (double)intersection.Count() / (double)sum.Count();
     }
-    else
+
+    return 0;
+  }
+
+  public bool PrototypesInsideCores(ICategory cat1, ICategory cat2)
+  {
+    var s1 = cat1.Summary;
+    var s2 = cat2.Summary;
+
+    if (s1.HasValue && s2.HasValue)
     {
-      return Maybe.None;
+      var p1 = s1.Value.Prototype;
+      var p2 = s2.Value.Prototype;
+
+      var c1r = s1.Value.Tplus;
+      var c2r = s2.Value.Tplus;
+
+      var distance = macrostructure.CalculateDistance(p1, p2);
+
+      if (distance <= c1r && distance <= c2r)
+      {
+        return true;
+      }
     }
+
+    return false;
   }
 
   private double GetDistance(CategorySummary c1, CategorySummary c2, Maybe<double> distance)

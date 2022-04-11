@@ -1,4 +1,5 @@
-﻿using CategoryManager.Model;
+﻿using CategoryManager.Category;
+using CategoryManager.Model;
 using CSharpFunctionalExtensions;
 
 namespace CategoryManager.Relations.Features
@@ -10,6 +11,8 @@ namespace CategoryManager.Relations.Features
 		Maybe<double> CoreCross(CategorySummary c1, CategorySummary c2, Maybe<double> distance);
 		Maybe<(double common, int bigger)> CoreInsideCore(CategorySummary c1, CategorySummary c2, Maybe<double> distance);
 
-		Maybe<double> IntersectionRatio(ISet<Observation> observations1, ISet<Observation> observations2);
+		double IntersectionRatio(ISet<Observation> observations1, ISet<Observation> observations2);
+
+		bool PrototypesInsideCores(ICategory cat1, ICategory cat2);
 	}
 }

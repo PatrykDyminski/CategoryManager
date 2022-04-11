@@ -19,4 +19,14 @@ public static class ExtensionMethods
   {
     return relation.Cat1Id == categoryId || relation.Cat2Id == categoryId;
   }
+
+  public static List<T> AddIfHasValue<T, U>(this List<T> list, Maybe<U> maybe) where U : T
+  {
+    if (maybe.HasValue)
+    {
+      list.Add(maybe.Value);
+      return list;
+    }
+    else return list;
+  }
 }

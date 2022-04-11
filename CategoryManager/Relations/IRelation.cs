@@ -2,7 +2,7 @@
 
 namespace CategoryManager.Relations;
 
-public record IRelation
+public class IRelation
 {
   public int Cat1Id { get; init; }
   public int Cat2Id { get; init; }

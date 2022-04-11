@@ -32,8 +32,7 @@ public class IntersectionRatioTests
     var res = rfd.IntersectionRatio(set1, set2);
 
     //Assert
-    res.HasValue.Should().BeTrue();
-    res.Value.Should().Be(1);
+    res.Should().Be(1);
   }
 
   [TestMethod]
@@ -56,7 +55,7 @@ public class IntersectionRatioTests
     var res = rfd.IntersectionRatio(set1, set2);
 
     //Assert
-    res.HasValue.Should().BeFalse();
+    res.Should().Be(0);
   }
 
   [TestMethod]
@@ -78,10 +77,9 @@ public class IntersectionRatioTests
     };
 
     //Act
-    var res = rfd.IntersectionRatio(set1, set2);
+    double res = rfd.IntersectionRatio(set1, set2);
 
     //Assert
-    res.HasValue.Should().BeTrue();
-    res.Value.Should().Be(0.5);
+    res.Should().Be(0.5);
   }
 }

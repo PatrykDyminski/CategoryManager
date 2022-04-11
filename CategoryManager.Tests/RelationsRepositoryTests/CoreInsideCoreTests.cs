@@ -14,6 +14,7 @@ using CategoryManager.Tests.TestCategory;
 using CategoryManager.Tests.Utils;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CategoryManager.Tests.RelationsRepositoryTests;
@@ -22,6 +23,8 @@ namespace CategoryManager.Tests.RelationsRepositoryTests;
 public class RelationsRepositoryAddingTests
 {
 	private readonly IRelationsDeterminer relDet;
+
+	private static readonly ISet<Observation> EmptySet = new HashSet<Observation>();
 
 	public RelationsRepositoryAddingTests()
 	{
@@ -39,7 +42,7 @@ public class RelationsRepositoryAddingTests
 		IRelationsRepository relationsRepository = new RelationsRepository(relDet, catRepo, new RelationValidator(catRepo, relDet));
 
 		CategorySummary sum1 = CSUtils.CreateSummary(1, 3, new int[] { 0, 0, 0, 0 });
-		CategoryMock category = new(1, sum1, null, null);
+		CategoryMock category = new(1, sum1, EmptySet, EmptySet);
 
 		//Act
 		relationsRepository.UpdateRelations(category);
@@ -58,8 +61,8 @@ public class RelationsRepositoryAddingTests
 		CategorySummary sum1 = CSUtils.CreateSummary(1, 3, new int[] { 0, 0, 0, 0 });
 		CategorySummary sum2 = CSUtils.CreateSummary(2, 6, new int[] { 0, 0, 0, 0 });
 
-		CategoryMock category1 = new(1, sum1, null, null);
-		CategoryMock category2 = new(2, sum2, null, null);
+		CategoryMock category1 = new(1, sum1, EmptySet, EmptySet);
+		CategoryMock category2 = new(2, sum2, EmptySet, EmptySet);
 
 		catRepo.AddCategory(category1);
 		catRepo.AddCategory(category2);
@@ -91,10 +94,10 @@ public class RelationsRepositoryAddingTests
 
 		CategorySummary sum1_2 = CSUtils.CreateSummary(1, 7, new int[] { 1, 1, 1, 1 });
 
-		CategoryMock category1 = new(1, sum1, null, null);
-		CategoryMock category2 = new(2, sum2, null, null);
+		CategoryMock category1 = new(1, sum1, EmptySet, EmptySet);
+		CategoryMock category2 = new(2, sum2, EmptySet, EmptySet);
 
-		CategoryMock category1_2 = new(1, sum1_2, null, null);
+		CategoryMock category1_2 = new(1, sum1_2, EmptySet, EmptySet);
 
 		//Act
 		relationsRepository.UpdateRelations(category1);
@@ -122,10 +125,10 @@ public class RelationsRepositoryAddingTests
 
 		CategorySummary sum1_2 = CSUtils.CreateSummary(1, 4, new int[] { 1, 0, 0, 0 });
 
-		CategoryMock category1 = new(1, sum1, null, null);
-		CategoryMock category2 = new(2, sum2, null, null);
+		CategoryMock category1 = new(1, sum1, EmptySet, EmptySet);
+		CategoryMock category2 = new(2, sum2, EmptySet, EmptySet);
 
-		CategoryMock category1_2 = new(1, sum1_2, null, null);
+		CategoryMock category1_2 = new(1, sum1_2, EmptySet, EmptySet);
 
 		catRepo.AddCategory(category1);
 		catRepo.AddCategory(category2);

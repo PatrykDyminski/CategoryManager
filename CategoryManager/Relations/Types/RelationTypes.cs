@@ -1,13 +1,13 @@
 ﻿namespace CategoryManager.Relations.Types;
 
-public record SpecificationRelation : IRelation
+public class SpecificationRelation : IRelation
 {
 }
 
-public record StrongSimilarityRelation : IRelation
+public class StrongSimilarityRelation : IRelation
 {
 }
 
-public record WeakSimilarityRelation : IRelation
+public class WeakSimilarityRelation : IRelation
 {
 }

@@ -36,7 +36,7 @@ public class RelationsDeterminer : IRelationsDeterminer
   public Maybe<IRelation> DetermineSimilarity(ICategory c1, ICategory c2)
   {
     var weakRatio = 0.35;
-    var strongRatio = 0.35;
+    var strongRatio = 0.9;
 
     var c1obs = c1.GetCoreObservations();
     var c2obs = c2.GetCoreObservations();

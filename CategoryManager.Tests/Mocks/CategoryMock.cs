@@ -27,6 +27,15 @@ public class CategoryMock : ICategory
     summary = new CategorySummary() { Tplus = core, Tminus = boundary, Prototype = prototype };
   }
 
+  public CategoryMock(int id, double core, double boundary, int[] prototype, ISet<Observation> coreObservations, ISet<Observation> boundaryObservarions)
+  {
+    this.id = id;
+    summary = new CategorySummary() { Tplus = core, Tminus = boundary, Prototype = prototype };
+
+    this.coreObservations = coreObservations;
+    this.boundaryObservarions = boundaryObservarions;
+  }
+
   public int Id => id;
 
   public Maybe<CategorySummary> Summary => summary;

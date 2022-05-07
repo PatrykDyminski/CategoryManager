@@ -39,7 +39,7 @@ var manager = provider.GetRequiredService<ICategoryManager>();
 //	manager.AddObservation(obs);
 //}
 
-var obsbatch = CategoryManager.Utils.ObservationsGenerator.GenerateObservations(1, new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, 2, 4, 20);
+var obsbatch = CategoryManager.Utils.ObservationsGenerator.GenerateObservations(1, new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, 2, 4, 100);
 
 manager.AddObservationsBatch(obsbatch);
 

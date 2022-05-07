@@ -84,6 +84,7 @@ public class Category : ICategory
 
 	private bool RecalculateCategorySummary()
 	{
+		//TODO Remove 
 		Console.WriteLine("Recalc + " + observations.Count);
 
 		//save even if no succesfull recalculation

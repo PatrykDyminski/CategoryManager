@@ -24,13 +24,19 @@ public class MedoidBasedCandidates : ICandidatesExtractor
 			.Select(x => new
 			{
 				Key = x,
-				Score = dict.Select(obj => obj.Value * macrostructure.CalculateDistance(obj.Key, x)).Sum()
+				Score = dict
+					.Select(obj => obj.Value * macrostructure.CalculateDistance(obj.Key, x))
+					.Sum()
 			});
 
 		//Find minimal score
-		var minVal = scoreDict.MinBy(x => x.Score)!;
+		var minVal = scoreDict
+			.MinBy(x => x.Score)!;
 
 		//Return all values with minimal score
-		return scoreDict.Where(x => x.Score == minVal.Score).Select(y => y.Key).ToArray();
+		return scoreDict
+			.Where(x => x.Score == minVal.Score)
+			.Select(y => y.Key)
+			.ToArray();
 	}
 }

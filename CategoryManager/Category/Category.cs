@@ -10,14 +10,14 @@ namespace CategoryManager.Category;
 public class Category : ICategory
 {
 	private readonly ICategoryDeterminer categoryDeterminer;
-	private readonly IDistance distance;
+	private readonly IDistance macrostructure;
 
 	private readonly int categoryId;
 	private readonly List<Observation> observations;
 	private Maybe<CategorySummary> summary;
 
-	private readonly ISet<Observation> coreObservationSet;
-	private readonly ISet<Observation> boundaryObservationSet;
+	private ISet<Observation> coreObservationSet;
+	private ISet<Observation> boundaryObservationSet;
 
 	private int previousRecalculation = 0;
 
@@ -27,10 +27,10 @@ public class Category : ICategory
 
 	public int Id => categoryId;
 
-	public Category(ICategoryDeterminer categoryDeterminer, IDistance distance, int id)
+	public Category(ICategoryDeterminer categoryDeterminer, IDistance macrostructure, int id)
 	{
 		this.categoryDeterminer = categoryDeterminer;
-		this.distance = distance;
+		this.macrostructure = macrostructure;
 
 		observations = new List<Observation>();
 
@@ -60,9 +60,15 @@ public class Category : ICategory
       ? Maybe.From(coreObservationSet.ToImmutableHashSet())
       : Maybe.None;
 
-  public void DisplayCategorySummary()
+  public string GetCategorySummary()
 	{
-		Console.WriteLine(summary.ToString());
+		var core = coreObservationSet.Select(x => "	" + x.ObservedObject.AsString() + $" - Dst: {macrostructure.CalculateDistance(x.ObservedObject, Prototype.Value)}").ToList();
+		var coreSummary = "\nCore:\n" + string.Join("\n", core);
+
+		var boundary = boundaryObservationSet.Select(x => "	" + x.ObservedObject.AsString() + $" - Dst: {macrostructure.CalculateDistance(x.ObservedObject, Prototype.Value)} - rel: " + x.IsRelated).ToList();
+		var boundarySummary = "\nBoundary:\n" + string.Join("\n", boundary);
+
+		return $"CategoryId: {categoryId}, " + summary.ToString() + coreSummary + boundarySummary;
 	}
 
 	private bool DetermineAndRecalculateCategorySummary()
@@ -95,10 +101,11 @@ public class Category : ICategory
 			.Tap(x =>
 			{
 				summary = x.Summary;
-				coreObservationSet.UnionWith(x.CoreObservationSet);
-				boundaryObservationSet.UnionWith(x.BoundaryObservationSet);
+				coreObservationSet = x.CoreObservationSet;
+				boundaryObservationSet = x.BoundaryObservationSet;
 
-				DisplayCategorySummary();
+				Console.WriteLine("Ding new summary");
+				//Console.WriteLine(GetCategorySummary());
 			});
 
 		return result.IsSuccess;

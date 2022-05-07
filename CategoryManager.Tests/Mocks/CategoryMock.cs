@@ -45,7 +45,7 @@ public class CategoryMock : ICategory
     throw new System.NotImplementedException();
   }
 
-  public void DisplayCategorySummary()
+  public string GetCategorySummary()
   {
     throw new System.NotImplementedException();
   }

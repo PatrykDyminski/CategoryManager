@@ -49,9 +49,11 @@ public class CategoryRepository : ICategoryRepository
 			: Result.Failure<ICategory>("No such category");
 	}
 
-	public void DisplaySummary()
+	public List<string> GetSummary()
 	{
-		Categories.ForEach(x => x.DisplayCategorySummary());
+		return Categories
+			.Select(x => x.GetCategorySummary())
+			.ToList();
 	}
 
 	private void EnsureCategoryExist(Observation observation)

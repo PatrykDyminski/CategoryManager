@@ -17,5 +17,5 @@ public interface ICategory
 
 	Maybe<ImmutableHashSet<Observation>> GetPositiveBoundaryObservations();
 
-	void DisplayCategorySummary();
+	string GetCategorySummary();
 }

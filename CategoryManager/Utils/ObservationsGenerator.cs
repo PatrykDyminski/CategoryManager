@@ -57,6 +57,7 @@ internal class ObservationsGenerator
 
 		//shuffle before returning
 		return observations
+			//.Where(x => (!x.IsRelated && new ObservedObjectComparer().Equals(x.ObservedObject, prototype)))
 			.OrderBy(t => rnd.Next())
 			.ToList();
 	}

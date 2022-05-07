@@ -1,4 +1,5 @@
 ﻿using CategoryManager.Model;
+using CSharpFunctionalExtensions;
 
 namespace CategoryManager.Manager
 {
@@ -6,5 +7,6 @@ namespace CategoryManager.Manager
 	{
 		void AddObservation(Observation observation);
 		void AddObservationsBatch(IEnumerable<Observation> observations);
+		Result<string> GetCategorySummary(int categotyId);
 	}
 }

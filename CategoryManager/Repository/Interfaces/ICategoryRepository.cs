@@ -12,5 +12,5 @@ public interface ICategoryRepository
 
 	bool AddObservation(Observation observation);
 
-	void DisplaySummary();
+	List<string> GetSummary();
 }

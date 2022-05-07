@@ -39,10 +39,15 @@ var manager = provider.GetRequiredService<ICategoryManager>();
 //	manager.AddObservation(obs);
 //}
 
-var obsbatch = CategoryManager.Utils.ObservationsGenerator.GenerateObservations(1, new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, 2, 4, 100);
-
+var obsbatch = CategoryManager.Utils.ObservationsGenerator.GenerateObservations(1, new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, 2, 4, 30);
 manager.AddObservationsBatch(obsbatch);
 
-Console.WriteLine("sadasdasda");
+var obsbatch2 = CategoryManager.Utils.ObservationsGenerator.GenerateObservations(2, new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, 2, 4, 30);
+manager.AddObservationsBatch(obsbatch2);
 
-//manager.DisplaySummary();
+var obsbatch3 = CategoryManager.Utils.ObservationsGenerator.GenerateObservations(3, new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, 2, 4, 30);
+manager.AddObservationsBatch(obsbatch3);
+
+Console.WriteLine(manager.GetCategorySummary(1).Value);
+Console.WriteLine(manager.GetCategorySummary(2).Value);
+Console.WriteLine(manager.GetCategorySummary(3).Value);

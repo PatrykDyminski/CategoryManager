@@ -34,4 +34,22 @@ internal class CategoryManager : ICategoryManager
 			AddObservation(obs);
 		}
 	}
+
+  public Result<string> GetCategorySummary(int categotyId)
+  {
+		var categorySummary = categoryRepository
+			.GetCategoryById(categotyId)
+			.Map(category => category.GetCategorySummary());
+
+		var relationsSummaries = relationsRepository
+			.GetRelationsForCategory(categotyId)
+			.ToList()
+			.Select(x => "		" + x.ToString());
+
+		var relationsSummary = string
+			.Join("\n", relationsSummaries);
+
+		return string
+			.Join("\n", categorySummary, relationsSummary);
+  }
 }

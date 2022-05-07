@@ -50,6 +50,12 @@ public class RelationsDeterminer : IRelationsDeterminer
 
       if (cir >= weakRatio)
       {
+        //Happended once that boundary was empty TODO
+        if(c1boundObs.HasNoValue || c2boundObs.HasNoValue)
+        {
+          return Maybe<IRelation>.None;
+        }
+
         var bir = rfd.IntersectionRatio(c1boundObs.Value, c2boundObs.Value);
 
         //Strong Similarity

@@ -27,11 +27,6 @@ internal class CategoryRepositoryMock : ICategoryRepository
     throw new NotImplementedException();
   }
 
-  public void DisplaySummary()
-  {
-    throw new NotImplementedException();
-  }
-
   public Result<ICategory> GetCategoryById(int id)
   {
     var cat = Categories
@@ -43,6 +38,11 @@ internal class CategoryRepositoryMock : ICategoryRepository
   }
 
   public Result<CategorySummary> GetCategorySummaryById(int id)
+  {
+    throw new NotImplementedException();
+  }
+
+  public List<string> GetSummary()
   {
     throw new NotImplementedException();
   }

@@ -1,5 +1,6 @@
 ﻿using CategoryManager.Distance;
 using CategoryManager.Model;
+using CategoryManager.Relations;
 using CategoryManager.Relations.Determiner;
 using CategoryManager.Relations.Features;
 using CategoryManager.Relations.Types;
@@ -70,10 +71,10 @@ public class SimilarityTests
 
     var rd = new RelationsDeterminer(new RelationFeaturesDeterminer(new HammingDistance()));
 
-    var res = rd.DetermineSimilarity(sum1, sum2);
+    var res = rd.DetermineSimilarityBasedOnObservationsSets(sum1, sum2);
 
     res.HasValue.Should().BeTrue();
-    res.Value.Should().BeOfType<StrongSimilarityRelation>();
+    res.Value.Should().BeOfType<ObservationBasedSimilarity>();
   }
 
   //One set has weak similarity and one strong
@@ -85,10 +86,12 @@ public class SimilarityTests
 
     var rd = new RelationsDeterminer(new RelationFeaturesDeterminer(new HammingDistance()));
 
-    var res = rd.DetermineSimilarity(sum1, sum2);
+    var res = rd.DetermineSimilarityBasedOnObservationsSets(sum1, sum2);
 
     res.HasValue.Should().BeTrue();
-    res.Value.Should().BeOfType<WeakSimilarityRelation>();
+    res.Value.Should().BeOfType<ObservationBasedSimilarity>();
+    var rel = (ISimilarityRelation) res.Value;
+    rel.SimilarityLevel.Should().Be(SimilarityLevel.Weak);
   }
 
 
@@ -101,10 +104,12 @@ public class SimilarityTests
 
     var rd = new RelationsDeterminer(new RelationFeaturesDeterminer(new HammingDistance()));
 
-    var res = rd.DetermineSimilarity(sum1, sum2);
+    var res = rd.DetermineSimilarityBasedOnObservationsSets(sum1, sum2);
 
     res.HasValue.Should().BeTrue();
-    res.Value.Should().BeOfType<WeakSimilarityRelation>();
+    res.Value.Should().BeOfType<ObservationBasedSimilarity>();
+    var rel = (ISimilarityRelation)res.Value;
+    rel.SimilarityLevel.Should().Be(SimilarityLevel.Weak);
   }
 
   //one sets have no similarity
@@ -116,7 +121,7 @@ public class SimilarityTests
 
     var rd = new RelationsDeterminer(new RelationFeaturesDeterminer(new HammingDistance()));
 
-    var res = rd.DetermineSimilarity(sum1, sum2);
+    var res = rd.DetermineSimilarityBasedOnObservationsSets(sum1, sum2);
 
     res.HasValue.Should().BeFalse();
   }

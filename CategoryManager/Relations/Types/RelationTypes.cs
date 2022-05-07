@@ -4,10 +4,6 @@ public class SpecificationRelation : IRelation
 {
 }
 
-public class StrongSimilarityRelation : IRelation
-{
-}
-
-public class WeakSimilarityRelation : IRelation
+public class ObservationBasedSimilarity : ISimilarityRelation
 {
 }

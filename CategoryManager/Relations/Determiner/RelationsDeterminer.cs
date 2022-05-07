@@ -33,7 +33,7 @@ public class RelationsDeterminer : IRelationsDeterminer
     return Maybe.None;
   }
 
-  public Maybe<IRelation> DetermineSimilarity(ICategory c1, ICategory c2)
+  public Maybe<IRelation> DetermineSimilarityBasedOnObservationsSets(ICategory c1, ICategory c2)
   {
     var weakRatio = 0.35;
     var strongRatio = 0.9;
@@ -55,19 +55,21 @@ public class RelationsDeterminer : IRelationsDeterminer
         //Strong Similarity
         if (cir >= strongRatio && bir >= strongRatio && rfd.PrototypesInsideCores(c1, c2))
         {
-          return new StrongSimilarityRelation
+          return new ObservationBasedSimilarity
           {
             Cat1Id = c1.Id,
             Cat2Id = c2.Id,
+            SimilarityLevel = SimilarityLevel.Weak
           };
         }
         //Weak Similarity
         else if (bir >= weakRatio)
         {
-          return new WeakSimilarityRelation
+          return new ObservationBasedSimilarity
           {
             Cat1Id = c1.Id,
             Cat2Id = c2.Id,
+            SimilarityLevel = SimilarityLevel.Weak
           };
         }
       }
@@ -81,7 +83,7 @@ public class RelationsDeterminer : IRelationsDeterminer
     var rels = new List<IRelation>();
 
     var spec = DetermineSpecification(c1, c2);
-    var similarity = DetermineSimilarity(c1, c2);
+    var similarity = DetermineSimilarityBasedOnObservationsSets(c1, c2);
 
     return rels
       .AddIfHasValue(similarity)

@@ -12,5 +12,7 @@ public interface ICategoryRepository
 
 	bool AddObservation(Observation observation);
 
-	List<string> GetSummary();
+	List<string> GetAllStringSummaries();
+
+  List<ICategory> GetAllCategories();
 }

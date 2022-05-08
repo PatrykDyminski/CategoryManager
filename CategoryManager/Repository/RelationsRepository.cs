@@ -1,6 +1,6 @@
 ﻿using CategoryManager.Category;
-using CategoryManager.Relations;
 using CategoryManager.Relations.Determiner;
+using CategoryManager.Relations.Types;
 using CategoryManager.Relations.Validator;
 using CategoryManager.Repository.Interfaces;
 using CategoryManager.Utils;

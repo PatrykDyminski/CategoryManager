@@ -1,4 +1,4 @@
-﻿using CategoryManager.Relations;
+﻿using CategoryManager.Relations.Types;
 using CSharpFunctionalExtensions;
 
 namespace CategoryManager.Utils;

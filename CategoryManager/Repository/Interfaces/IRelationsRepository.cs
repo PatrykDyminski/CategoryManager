@@ -1,5 +1,5 @@
 ﻿using CategoryManager.Category;
-using CategoryManager.Relations;
+using CategoryManager.Relations.Types;
 
 namespace CategoryManager.Repository.Interfaces;
 

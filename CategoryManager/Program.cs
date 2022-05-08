@@ -3,6 +3,7 @@ using CategoryManager.Category.Factory;
 using CategoryManager.CategoryDeterminer;
 using CategoryManager.Distance;
 using CategoryManager.Manager;
+using CategoryManager.Prediction;
 using CategoryManager.Relations.Determiner;
 using CategoryManager.Relations.Features;
 using CategoryManager.Relations.Validator;
@@ -25,6 +26,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .AddSingleton<IRelationsDeterminer, RelationsDeterminer>()
         .AddSingleton<IRelationFeaturesDeterminer, RelationFeaturesDeterminer>()
         .AddSingleton<ICategoryFactory, CategoryFactory>()
+        .AddSingleton<ICategoryPredictor, CategoryPredictor>()
         .AddSingleton<ICategoryManager, CategoryManager.Manager.CategoryManager>());
 }
 
@@ -51,3 +53,13 @@ manager.AddObservationsBatch(obsbatch3);
 Console.WriteLine(manager.GetCategorySummary(1).Value);
 Console.WriteLine(manager.GetCategorySummary(2).Value);
 Console.WriteLine(manager.GetCategorySummary(3).Value);
+
+
+var predictor = provider.GetRequiredService<ICategoryPredictor>();
+
+var predRes = predictor.PredictCategory(new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, true);
+
+Console.WriteLine(predRes.Value.ClosestCategory.Id);
+Console.WriteLine(predRes.Value.IsInCore);
+predRes.Value.Relations.GetValueOrDefault().ForEach(x => Console.WriteLine(x.ToString()));
+

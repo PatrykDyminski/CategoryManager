@@ -28,6 +28,7 @@ public class RelationValidator : IRelationValidator
     return relation switch
     {
       SpecificationRelation => relationsDeterminer.DetermineSpecification(cat1.Value, cat2.Value).HasValue,
+      ObservationBasedSimilarity => relationsDeterminer.DetermineSimilarityBasedOnObservationsSets(cat1.Value, cat2.Value).HasValue,
       _ => throw new NotImplementedException(),
     };
   }

@@ -1,6 +1,5 @@
 ﻿using CategoryManager.Distance;
 using CategoryManager.Model;
-using CategoryManager.Relations;
 using CategoryManager.Relations.Determiner;
 using CategoryManager.Relations.Features;
 using CategoryManager.Relations.Types;

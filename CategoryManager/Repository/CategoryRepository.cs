@@ -19,7 +19,7 @@ public class CategoryRepository : ICategoryRepository
 		Categories = new List<ICategory>();
 	}
 
-	public bool AddObservation(Observation observation)
+  public bool AddObservation(Observation observation)
 	{
 		//if there is no such category observed before
 		EnsureCategoryExist(observation);
@@ -49,11 +49,16 @@ public class CategoryRepository : ICategoryRepository
 			: Result.Failure<ICategory>("No such category");
 	}
 
-	public List<string> GetSummary()
+	public List<string> GetAllStringSummaries()
 	{
 		return Categories
 			.Select(x => x.GetCategorySummary())
 			.ToList();
+	}
+
+	public List<ICategory> GetAllCategories()
+	{
+		return Categories;
 	}
 
 	private void EnsureCategoryExist(Observation observation)

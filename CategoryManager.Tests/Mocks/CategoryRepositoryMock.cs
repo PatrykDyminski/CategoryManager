@@ -42,7 +42,12 @@ internal class CategoryRepositoryMock : ICategoryRepository
     throw new NotImplementedException();
   }
 
-  public List<string> GetSummary()
+  public List<string> GetAllStringSummaries()
+  {
+    throw new NotImplementedException();
+  }
+
+  public List<ICategory> GetAllCategories()
   {
     throw new NotImplementedException();
   }

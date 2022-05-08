@@ -33,7 +33,7 @@ public class RelationsDeterminer : IRelationsDeterminer
     return Maybe.None;
   }
 
-  public Maybe<IRelation> DetermineSimilarityBasedOnObservationsSets(ICategory c1, ICategory c2)
+  public Maybe<ISimilarityRelation> DetermineSimilarityBasedOnObservationsSets(ICategory c1, ICategory c2)
   {
     var weakRatio = 0.35;
     var strongRatio = 0.9;
@@ -53,7 +53,7 @@ public class RelationsDeterminer : IRelationsDeterminer
         //Happended once that boundary was empty TODO
         if(c1boundObs.HasNoValue || c2boundObs.HasNoValue)
         {
-          return Maybe<IRelation>.None;
+          return Maybe<ISimilarityRelation>.None;
         }
 
         var bir = rfd.IntersectionRatio(c1boundObs.Value, c2boundObs.Value);
@@ -81,7 +81,7 @@ public class RelationsDeterminer : IRelationsDeterminer
       }
     }
 
-    return Maybe<IRelation>.None;
+    return Maybe<ISimilarityRelation>.None;
   }
 
   public List<IRelation> GetRelationsForCategories(ICategory c1, ICategory c2)

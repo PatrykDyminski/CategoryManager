@@ -1,4 +1,6 @@
-﻿namespace CategoryManager.Relations.Validator;
+﻿using CategoryManager.Relations.Types;
+
+namespace CategoryManager.Relations.Validator;
 
 public interface IRelationValidator
 {

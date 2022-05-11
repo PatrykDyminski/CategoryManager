@@ -61,19 +61,22 @@ public class RelationsRepositoryAddingTests
 		CategorySummary sum1 = CSUtils.CreateSummary(1, 3, new int[] { 0, 0, 0, 0 });
 		CategorySummary sum2 = CSUtils.CreateSummary(2, 6, new int[] { 0, 0, 0, 0 });
 
-		CategoryMock category1 = new(1, sum1, EmptySet, EmptySet);
-		CategoryMock category2 = new(2, sum2, EmptySet, EmptySet);
+		var cat1Id = 100;
+		var cat2Id = 200;
 
-		catRepo.AddCategory(category1);
-		catRepo.AddCategory(category2);
+		CategoryMock category1 = new(cat1Id, sum1, EmptySet, EmptySet);
+		CategoryMock category2 = new(cat2Id, sum2, EmptySet, EmptySet);
 
 		//Act
+		catRepo.AddCategory(category1);
 		relationsRepository.UpdateRelations(category1);
+
+		catRepo.AddCategory(category2);
 		relationsRepository.UpdateRelations(category2);
 
 		//Assert
-		var rels1 = relationsRepository.GetRelationsForCategory(1);
-		var rels2 = relationsRepository.GetRelationsForCategory(2);
+		var rels1 = relationsRepository.GetRelationsForCategory(cat1Id);
+		var rels2 = relationsRepository.GetRelationsForCategory(cat2Id);
 
 		rels1.Should().HaveCount(1);
 		rels2.Should().HaveCount(1);
@@ -114,7 +117,7 @@ public class RelationsRepositoryAddingTests
 	}
 
 	[TestMethod]
-	public void Adding2NewCategories_ThenUpdateOneRelationPrototype_RelationPersists()
+	public void Adding2NewCategories_ThenUpdateOneCategoryPrototype_RelationPersists()
 	{
 		//Arrange
 		var catRepo = new CategoryRepositoryMock();
@@ -125,16 +128,16 @@ public class RelationsRepositoryAddingTests
 
 		CategorySummary sum1_2 = CSUtils.CreateSummary(1, 4, new int[] { 1, 0, 0, 0 });
 
-		CategoryMock category1 = new(1, sum1, EmptySet, EmptySet);
-		CategoryMock category2 = new(2, sum2, EmptySet, EmptySet);
+		CategoryMock category1 = new(100, sum1, EmptySet, EmptySet);
+		CategoryMock category2 = new(200, sum2, EmptySet, EmptySet);
 
-		CategoryMock category1_2 = new(1, sum1_2, EmptySet, EmptySet);
-
-		catRepo.AddCategory(category1);
-		catRepo.AddCategory(category2);
+		CategoryMock category1_2 = new(100, sum1_2, EmptySet, EmptySet);
 
 		//Act
+		catRepo.AddCategory(category1);
 		relationsRepository.UpdateRelations(category1);
+
+		catRepo.AddCategory(category2);
 		relationsRepository.UpdateRelations(category2);
 
 		catRepo.AddCategory(category1_2);
@@ -142,8 +145,8 @@ public class RelationsRepositoryAddingTests
 		relationsRepository.UpdateRelations(category1_2);
 
 		//Assert
-		var rels1 = relationsRepository.GetRelationsForCategory(1);
-		var rels2 = relationsRepository.GetRelationsForCategory(2);
+		var rels1 = relationsRepository.GetRelationsForCategory(100);
+		var rels2 = relationsRepository.GetRelationsForCategory(200);
 
 		rels1.Should().HaveCount(1);
 		rels2.Should().HaveCount(1);

@@ -18,7 +18,7 @@ public class RelationsRepository : IRelationsRepository
   private List<int> KnownCategories;
 
   public RelationsRepository(
-    IRelationsDeterminer relationsDeterminer, 
+    IRelationsDeterminer relationsDeterminer,
     ICategoryRepository categoryRepository,
     IRelationValidator relationValidator)
   {
@@ -53,22 +53,21 @@ public class RelationsRepository : IRelationsRepository
 
   private void HandleExistingRelationsForCategory(ICategory category)
   {
-    var part1 = Relations
+    var validRelations = Relations
       .Where(relation => relation.Involve(category.Id))
       .Where(x => relationValidator.ValidateRelation(x));
 
     Relations = Relations
-      .Where(relation => relation.Cat1Id != category.Id && relation.Cat2Id != category.Id)
-      .Concat(part1)
+      .Where(relation => !relation.Involve(category.Id))
+      .Concat(validRelations)
       .ToList();
   }
 
   private void HandleNewCategory(ICategory category)
   {
-    var listOfRelations = KnownCategories
-      .Select(catId => categoryRepository.GetCategoryById(catId))
-      .Where(res => res.IsSuccess)
-      .Select(success => success.Value)
+    var listOfRelations = categoryRepository.GetAllCategories()
+      .Where(cat => cat.Id != category.Id)
+      .Where(cat => cat.Summary.HasValue)
       .SelectMany(cat => relationsDeterminer
         .GetRelationsForCategories(category, cat));
 

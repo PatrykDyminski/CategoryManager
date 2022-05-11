@@ -26,7 +26,9 @@ public class RelationsDeterminer : IRelationsDeterminer
       {
         Cat1Id = c1.Id,
         Cat2Id = c2.Id,
-        BiggerCategoryId = op1.Value.bigger
+        BiggerCategoryId = op1.Value.bigger == 1 
+          ? c1.Id 
+          : c2.Id
       };
     }
 

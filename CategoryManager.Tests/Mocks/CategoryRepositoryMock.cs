@@ -49,6 +49,6 @@ internal class CategoryRepositoryMock : ICategoryRepository
 
   public List<ICategory> GetAllCategories()
   {
-    throw new NotImplementedException();
+    return Categories;
   }
 }

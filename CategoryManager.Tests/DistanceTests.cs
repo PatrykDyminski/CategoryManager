@@ -1,4 +1,4 @@
-using CategoryManager.Distance;
+using CategoryManager.Macrostructure;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -52,7 +52,7 @@ public class DistanceTests
 	[TestMethod]
 	public void JaccardDistanceTest()
 	{
-		var jaccard = new JaccardDistance();
+		var jaccard = new JaccardSimilarity();
 
 		int[] obj1 = { 0, 1, 0, 1, 0, 1 };
 		int[] obj2 = { 0, 0, 0, 1, 1, 1 };

@@ -1,5 +1,4 @@
 ﻿using CategoryManager.Model;
-using System;
 
 namespace CategoryManager.Tests.Utils;
 

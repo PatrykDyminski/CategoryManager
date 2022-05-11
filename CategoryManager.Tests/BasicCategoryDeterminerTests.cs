@@ -1,6 +1,6 @@
 ﻿using CategoryManager.Candidates;
 using CategoryManager.CategoryDeterminer;
-using CategoryManager.Distance;
+using CategoryManager.Macrostructure;
 using CategoryManager.Model;
 using CategoryManager.Utils;
 using FluentAssertions;

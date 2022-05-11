@@ -1,7 +1,7 @@
 ﻿using CategoryManager.Candidates;
 using CategoryManager.Category.Factory;
 using CategoryManager.CategoryDeterminer;
-using CategoryManager.Distance;
+using CategoryManager.Macrostructure;
 using CategoryManager.Manager;
 using CategoryManager.Prediction;
 using CategoryManager.Relations.Determiner;
@@ -50,10 +50,17 @@ manager.AddObservationsBatch(obsbatch2);
 var obsbatch3 = CategoryManager.Utils.ObservationsGenerator.GenerateObservations(3, new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, 2, 4, 30);
 manager.AddObservationsBatch(obsbatch3);
 
+var obsbatch4 = CategoryManager.Utils.ObservationsGenerator.GenerateObservations(4, new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, 2, 4, 30);
+manager.AddObservationsBatch(obsbatch4);
+
+var obsbatch5 = CategoryManager.Utils.ObservationsGenerator.GenerateObservations(5, new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, 2, 4, 30);
+manager.AddObservationsBatch(obsbatch5);
+
 Console.WriteLine(manager.GetCategorySummary(1).Value);
 Console.WriteLine(manager.GetCategorySummary(2).Value);
 Console.WriteLine(manager.GetCategorySummary(3).Value);
-
+Console.WriteLine(manager.GetCategorySummary(4).Value);
+Console.WriteLine(manager.GetCategorySummary(5).Value);
 
 var predictor = provider.GetRequiredService<ICategoryPredictor>();
 
@@ -62,4 +69,3 @@ var predRes = predictor.PredictCategory(new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, tr
 Console.WriteLine(predRes.Value.ClosestCategory.Id);
 Console.WriteLine(predRes.Value.IsInCore);
 predRes.Value.Relations.GetValueOrDefault().ForEach(x => Console.WriteLine(x.ToString()));
-

@@ -1,5 +1,5 @@
 ﻿using CategoryManager.CategoryDeterminer;
-using CategoryManager.Distance;
+using CategoryManager.Macrostructure;
 
 namespace CategoryManager.Category.Factory;
 

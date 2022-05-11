@@ -1,5 +1,5 @@
 ﻿using CategoryManager.Candidates;
-using CategoryManager.Distance;
+using CategoryManager.Macrostructure;
 using CategoryManager.Model;
 using CategoryManager.Utils;
 using CSharpFunctionalExtensions;

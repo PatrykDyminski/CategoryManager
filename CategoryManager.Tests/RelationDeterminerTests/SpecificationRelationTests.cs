@@ -1,4 +1,4 @@
-﻿using CategoryManager.Distance;
+﻿using CategoryManager.Macrostructure;
 using CategoryManager.Relations.Determiner;
 using CategoryManager.Relations.Features;
 using CategoryManager.Tests.TestCategory;

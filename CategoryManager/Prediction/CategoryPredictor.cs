@@ -1,4 +1,4 @@
-﻿using CategoryManager.Distance;
+﻿using CategoryManager.Macrostructure;
 using CategoryManager.Repository.Interfaces;
 using CSharpFunctionalExtensions;
 

@@ -1,4 +1,4 @@
-﻿using CategoryManager.Distance;
+﻿using CategoryManager.Macrostructure;
 using CategoryManager.Utils;
 
 namespace CategoryManager.Candidates;

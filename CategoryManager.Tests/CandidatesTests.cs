@@ -1,5 +1,5 @@
 ﻿using CategoryManager.Candidates;
-using CategoryManager.Distance;
+using CategoryManager.Macrostructure;
 using CategoryManager.Utils;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

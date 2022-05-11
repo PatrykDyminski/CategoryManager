@@ -1,4 +1,4 @@
-﻿namespace CategoryManager.Distance;
+﻿namespace CategoryManager.Macrostructure;
 
 public sealed class HammingDistance : IDistance
 {

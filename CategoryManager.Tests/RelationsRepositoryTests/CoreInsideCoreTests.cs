@@ -1,5 +1,6 @@
 ﻿using CategoryManager.Candidates;
 using CategoryManager.Category.Factory;
+using CategoryManager.Category.Recalculation;
 using CategoryManager.CategoryDeterminer;
 using CategoryManager.Macrostructure;
 using CategoryManager.Model;
@@ -38,7 +39,15 @@ public class RelationsRepositoryAddingTests
 	public void AddingNewCategory()
 	{
 		//Arrange
-		var catRepo = new CategoryRepository(new CategoryFactory( new HammingDistance(), new BasicCategoryDeterminer(new HammingDistance(), new MedoidBasedCandidates(new HammingDistance()))));
+		var catRepo = new CategoryRepository(
+			new CategoryFactory( 
+				new HammingDistance(), 
+				new BasicCategoryDeterminer(
+					new HammingDistance(), 
+					new MedoidBasedCandidates(
+						new HammingDistance())),
+				new RecalculationBasedOnProportion(0.15f)));
+
 		IRelationsRepository relationsRepository = new RelationsRepository(relDet, catRepo, new RelationValidator(catRepo, relDet));
 
 		CategorySummary sum1 = CSUtils.CreateSummary(1, 3, new int[] { 0, 0, 0, 0 });
@@ -89,7 +98,15 @@ public class RelationsRepositoryAddingTests
 	public void Adding2NewCategories_ThenUpdate_OneRelation_ThenZero()
 	{
 		//Arrange
-		var catRepo = new CategoryRepository(new CategoryFactory(new HammingDistance(), new BasicCategoryDeterminer(new HammingDistance(), new MedoidBasedCandidates(new HammingDistance()))));
+		var catRepo = new CategoryRepository(
+			new CategoryFactory(
+				new HammingDistance(),
+				new BasicCategoryDeterminer(
+					new HammingDistance(),
+					new MedoidBasedCandidates(
+						new HammingDistance())),
+				new RecalculationBasedOnProportion(0.15f)));
+
 		IRelationsRepository relationsRepository = new RelationsRepository(relDet, catRepo, new RelationValidator(catRepo, relDet));
 
 		CategorySummary sum1 = CSUtils.CreateSummary(1, 3, new int[] { 0, 0, 0, 0 });

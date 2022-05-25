@@ -1,4 +1,5 @@
-﻿using CategoryManager.CategoryDeterminer;
+﻿using CategoryManager.Category.Recalculation;
+using CategoryManager.CategoryDeterminer;
 using CategoryManager.Macrostructure;
 using CategoryManager.Model;
 using CategoryManager.Utils;
@@ -11,8 +12,8 @@ public class Category : ICategory
 {
 	private readonly ICategoryDeterminer categoryDeterminer;
 	private readonly IDistance macrostructure;
-
-	private readonly int categoryId;
+  private readonly ICategoryRecalculationDeterminer crd;
+  private readonly int categoryId;
 	private readonly List<Observation> observations;
 	private Maybe<CategorySummary> summary;
 
@@ -27,12 +28,16 @@ public class Category : ICategory
 
 	public int Id => categoryId;
 
-	public Category(ICategoryDeterminer categoryDeterminer, IDistance macrostructure, int id)
+	public Category(
+		ICategoryDeterminer categoryDeterminer, 
+		IDistance macrostructure,
+		ICategoryRecalculationDeterminer crd,
+		int id)
 	{
 		this.categoryDeterminer = categoryDeterminer;
 		this.macrostructure = macrostructure;
-
-		observations = new List<Observation>();
+    this.crd = crd;
+    observations = new List<Observation>();
 
 		coreObservationSet = new HashSet<Observation>(new ObservationComparerWithRelation());
 		boundaryObservationSet = new HashSet<Observation>(new ObservationComparerWithRelation());
@@ -80,7 +85,7 @@ public class Category : ICategory
 		}
 
 		//next recalculation after.....
-		if (observations.Count - previousRecalculation >= 0.1 * previousRecalculation)
+		if (crd.ShouldRecalculate(observations.Count, previousRecalculation))
 		{
 			return RecalculateCategorySummary();
 		}

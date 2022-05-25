@@ -1,5 +1,6 @@
 ﻿using CategoryManager.Candidates;
 using CategoryManager.Category.Factory;
+using CategoryManager.Category.Recalculation;
 using CategoryManager.CategoryDeterminer;
 using CategoryManager.Macrostructure;
 using CategoryManager.Manager;
@@ -19,6 +20,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
       services
         .AddSingleton<IDistance, HammingDistance>()
         .AddSingleton<ICandidatesExtractor, MedoidBasedCandidates>()
+        .AddSingleton<ICategoryRecalculationDeterminer>(new RecalculationBasedOnProportion(0.15f))
         .AddSingleton<ICategoryDeterminer, BasicCategoryDeterminer>()
         .AddTransient<IRelationValidator, RelationValidator>()
         .AddSingleton<ICategoryRepository, CategoryRepository>()
@@ -41,7 +43,7 @@ var manager = provider.GetRequiredService<ICategoryManager>();
 //	manager.AddObservation(obs);
 //}
 
-var obsbatch = CategoryManager.Utils.ObservationsGenerator.GenerateObservations(1, new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, 2, 4, 30);
+var obsbatch = CategoryManager.Utils.ObservationsGenerator.GenerateObservations(1, new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, 2, 4, 30000);
 manager.AddObservationsBatch(obsbatch);
 
 var obsbatch2 = CategoryManager.Utils.ObservationsGenerator.GenerateObservations(2, new int[] { 1, 1, 1, 1, 0, 0, 0, 0 }, 2, 4, 30);

@@ -43,11 +43,11 @@ public class BasicCategoryDeterminer : ICategoryDeterminer
     foreach (var prototypeCandidate in filteredCandidates)
     {
       var positiveDistances = positiveObservationsSet
-      .Select(x => new
-      {
-        Observation = x,
-        Distance = macrostructure.CalculateDistance(prototypeCandidate, x.ObservedObject)
-      });
+        .Select(x => new
+        {
+          Observation = x,
+          Distance = macrostructure.CalculateDistance(prototypeCandidate, x.ObservedObject)
+        });
 
       var negativeDistances = negativeObservationsSet
         .Select(x => new

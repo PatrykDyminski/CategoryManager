@@ -48,17 +48,4 @@ public class DistanceTests
 			.Throw<ArgumentException>()
 			.WithMessage("Objects must be equal length");
 	}
-
-	[TestMethod]
-	public void JaccardDistanceTest()
-	{
-		var jaccard = new JaccardSimilarity();
-
-		int[] obj1 = { 0, 1, 0, 1, 0, 1 };
-		int[] obj2 = { 0, 0, 0, 1, 1, 1 };
-
-		var distance = jaccard.CalculateDistance(obj1, obj2);
-
-		distance.Should().Be(0.5);
-	}
 }
